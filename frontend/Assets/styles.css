@@ -810,6 +810,12 @@ main {
         padding: 0.3rem;
     }
 
+    .editor-container, .preview-container {
+        max-height: 83vh;
+    }
+}
+
+@media (max-width: 950px) {
     header {
         flex-direction: column;
         gap: 0.5rem;
@@ -817,15 +823,13 @@ main {
         margin: 0, auto;
     }
 
-    .header-title {
-        justify-content: center;
+    #header-title {
+        display: none;
     }
 
     .header-right {
-        position: absolute;
-        float: right;
-        padding: 0;
-        margin: 0;
+        position: static;
+        gap: 1.5rem;
     }
     
     .notepad-controls {
@@ -837,14 +841,6 @@ main {
     
     #theme-toggle {
         position: static;
-    }
-
-    .editor-container, .preview-container {
-        max-height: 83vh;
-    }
-
-    .notepad-controls-wrapper {
-        gap: 2rem;
     }
 }
 
@@ -878,7 +874,7 @@ main {
     }
 
     #header-title {
-        margin-bottom: 0.25rem;
+        display: none;
     }
 
     .notepad-controls {
