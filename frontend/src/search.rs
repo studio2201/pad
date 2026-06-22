@@ -84,7 +84,7 @@ pub fn search_modal(props: &SearchModalProps) -> Html {
     };
 
     html! {
-        <div id="search-modal" class="modal" onclick={on_close.clone()} style="display: block;">
+        <div id="search-modal" class="modal visible" onclick={on_close.clone()}>
             <div class="search-modal-content" onclick={|e: MouseEvent| e.stop_propagation()}>
                 <input 
                     type="text" 

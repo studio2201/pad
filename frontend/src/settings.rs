@@ -96,7 +96,7 @@ pub fn settings_modal(props: &SettingsModalProps) -> Html {
     };
 
     html! {
-        <div id="settings-modal" class="modal" style="display: block;">
+        <div id="settings-modal" class="modal visible">
             <div class="modal-content">
                 <h2>{"Settings"}</h2>
                 <div class="settings-form">

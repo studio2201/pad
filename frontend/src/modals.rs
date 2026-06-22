@@ -49,7 +49,7 @@ pub fn rename_modal(props: &RenameModalProps) -> Html {
     };
 
     html! {
-        <div id="rename-modal" class="modal" style="display: block;">
+        <div id="rename-modal" class="modal visible">
             <div class="modal-content">
                 <h2>{"Rename Notepad"}</h2>
                 <input 
@@ -95,7 +95,7 @@ pub fn delete_modal(props: &DeleteModalProps) -> Html {
     };
 
     html! {
-        <div id="delete-modal" class="modal" style="display: block;">
+        <div id="delete-modal" class="modal visible">
             <div class="modal-content">
                 <h2>{"Delete Notepad"}</h2>
                 <p class="modal-message">{"Are you sure you want to delete this notepad? This action cannot be undone."}</p>
