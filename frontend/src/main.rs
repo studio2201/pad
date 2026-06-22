@@ -1,6 +1,6 @@
 mod types; mod services; mod login; mod settings; mod preview; mod search;
 mod editor; mod modals; mod shortcuts; mod collab; mod collab_utils; mod header;
-mod toolbar; mod i18n;
+mod toolbar; mod i18n; mod i18n_en_es; mod i18n_de_fr; mod i18n_ja_zh; mod i18n_pt_ru;
 
 use yew::prelude::*;
 use shortcuts::register_keyboard_shortcuts;

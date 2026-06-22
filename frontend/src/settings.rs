@@ -134,7 +134,13 @@ pub fn settings_modal(props: &SettingsModalProps) -> Html {
                         {locale.t("settings_lang")}
                         <select class="modal-input" onchange={on_lang_change} value={locale.current.clone()} style="margin-top: 0.5rem; width: 100%;">
                             <option value="en">{"English"}</option>
+                            <option value="zh">{"简体中文"}</option>
                             <option value="es">{"Español"}</option>
+                            <option value="de">{"Deutsch"}</option>
+                            <option value="ja">{"日本語"}</option>
+                            <option value="fr">{"Français"}</option>
+                            <option value="pt">{"Português"}</option>
+                            <option value="ru">{"Русский"}</option>
                         </select>
                     </label>
                     <label class="settings-label">
