@@ -36,7 +36,7 @@ pub fn app() -> Html {
     let rename_open = use_state(|| false);
     let delete_open = use_state(|| false);
     let shortcuts_open = use_state(|| false);
-    let app_version = use_state(|| "1.0.5".to_string());
+    let app_version = use_state(|| "1.0.6".to_string());
     let theme = use_state(StorageService::get_theme);
 
     {

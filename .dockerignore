@@ -1,13 +1,13 @@
-node_modules
-npm-debug.log
-data
+target/
+frontend/dist/
+data/
 .cursorrules
 .dockerignore
 .git
 .github
 .gitignore
 .gitattributes
-docs
+docs/
 Dockerfile
 docker-compose.yml
 README.md
