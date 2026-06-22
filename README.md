@@ -102,8 +102,27 @@ services:
       RUSTPAD_PIN: "5678"
       BASE_URL: "http://localhost:4402"
       TRUST_PROXY: "false"
-```
 Run `docker compose up -d` to launch the services.
+
+### Nix Layered Container Building (Alternative)
+
+For maximum isolation, reproducibility, and minimal footprints (no terminal tools, no shell, running strictly as `USER nobody`), you can compile and package the server using the provided Nix flake:
+
+```bash
+# 1. Build the layered Docker image tarball via Nix flake
+nix build .#dockerImage
+
+# 2. Load the resulting tarball image directly into Docker
+docker load < result
+
+# 3. Execute the Nix-built container
+docker run -d \
+  --name rustpad-nix \
+  -p 4402:4402 \
+  -v ./data:/app/data \
+  -e RUSTPAD_PIN=1234 \
+  rustpad-nix:latest
+```
 
 ---
 
