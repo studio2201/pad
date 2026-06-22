@@ -62,14 +62,7 @@ pub struct RenameNotepadPayload {
     pub name: String,
 }
 
-#[derive(Deserialize)]
-#[serde(rename_all = "camelCase")]
-#[allow(dead_code)]
-pub struct RenameNotepadResponse {
-    pub id: String,
-    pub name: String,
-    pub name_changed: bool,
-}
+
 
 #[derive(Deserialize)]
 pub struct PinRequiredResponse {
@@ -91,20 +84,14 @@ pub struct VerifyPinResponse {
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
-#[allow(dead_code)]
 pub struct ConfigResponse {
-    pub site_title: String,
-    pub base_url: String,
     pub version: String,
 }
 
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
-#[allow(dead_code)]
 pub struct SearchResponse {
     pub results: Vec<SearchItem>,
-    pub total_pages: usize,
-    pub current_page: usize,
 }
 
 impl ApiService {
@@ -180,14 +167,13 @@ impl ApiService {
             .await
     }
 
-    pub async fn rename_notepad(id: &str, name: &str) -> Result<RenameNotepadResponse, gloo_net::Error> {
+    pub async fn rename_notepad(id: &str, name: &str) -> Result<(), gloo_net::Error> {
         let payload = RenameNotepadPayload { name: name.to_string() };
         Request::put(&format!("/api/notepads/{}", id))
             .json(&payload)?
             .send()
-            .await?
-            .json::<RenameNotepadResponse>()
-            .await
+            .await?;
+        Ok(())
     }
 
     pub async fn delete_notepad(id: &str) -> Result<(), gloo_net::Error> {

@@ -9,6 +9,8 @@ pub struct IndexedItem {
     pub id: String,
     pub name: String,
     pub content: String,
+    pub name_lower: String,
+    pub content_lower: String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -55,10 +57,14 @@ impl AppStateInner {
         for notepad in &list {
             let file_path = get_notepad_file_path(notepad, &self.data_dir).await;
             let content = fs::read_to_string(&file_path).await.unwrap_or_default();
+            let name_lower = notepad.name.to_lowercase();
+            let content_lower = content.to_lowercase();
             items.push(IndexedItem {
                 id: notepad.id.clone(),
                 name: notepad.name.clone(),
                 content,
+                name_lower,
+                content_lower,
             });
         }
 
@@ -73,11 +79,8 @@ impl AppStateInner {
         let mut scored_results = Vec::new();
 
         for item in items.iter() {
-            let name_lower = item.name.to_lowercase();
-            let content_lower = item.content.to_lowercase();
-
-            let name_score = fuzzy_match_subsequence(&name_lower, &query_lower);
-            let content_score = fuzzy_match_subsequence(&content_lower, &query_lower);
+            let name_score = fuzzy_match_subsequence(&item.name_lower, &query_lower);
+            let content_score = fuzzy_match_subsequence(&item.content_lower, &query_lower);
 
             if name_score.is_some() || content_score.is_some() {
                 let score = std::cmp::max(name_score.unwrap_or(0), content_score.unwrap_or(0));
@@ -90,8 +93,7 @@ impl AppStateInner {
         scored_results
             .into_iter()
             .map(|(item, _)| {
-                let is_filename_match = item.name.to_lowercase().contains(&query_lower);
-                let content_lower = item.content.to_lowercase();
+                let is_filename_match = item.name_lower.contains(&query_lower);
                 let mut truncated_content = item.content.clone();
 
                 let mut r#match = "notepad".to_string();
@@ -106,7 +108,7 @@ impl AppStateInner {
                 if !is_filename_match {
                     r#match = format!("content in {}", name_truncated);
                     
-                    if let Some(match_byte_idx) = content_lower.find(&query_lower) {
+                    if let Some(match_byte_idx) = item.content_lower.find(&query_lower) {
                         let char_boundaries: Vec<(usize, char)> = item.content.char_indices().collect();
                         
                         if let Some(match_char_idx) = char_boundaries.iter().position(|&(b_idx, _)| b_idx == match_byte_idx) {
