@@ -57,7 +57,7 @@ A stupid simple, no auth (unless you want it!), modern notepad application with 
 ### Prerequisites
 
 - Docker (recommended)
-- Node.js >=20.0.0 (for local development)
+- Rust >= 1.70 (for local development) or Node.js >=20.0.0 (legacy)
 
 ### Option 1: Docker (For Dummies)
 
@@ -123,13 +123,7 @@ docker compose up -d
 
 ### Option 3: Running Locally (For Developers)
 
-1. Install dependencies:
-
-```bash
-npm install
-```
-
-2. Set environment variables in `.env` or `cp .env.example .env`:
+1. Set environment variables in `.env` (configured in UTF-8):
 
 ```bash
 PORT=3000                  # Port to run the server on
@@ -138,10 +132,34 @@ SITE_TITLE=DumbPad        # Custom site title
 BASE_URL=http://localhost:3000  # Base URL for the application
 ```
 
-3. Start the server:
+2. Run using **Rust** (Recommended):
 
 ```bash
+# Run in development mode
+cargo run
+
+# Run in release mode
+cargo run --release
+```
+
+Or use the npm script shortcuts:
+
+```bash
+# Dev mode (runs cargo run)
+npm run dev
+
+# Production mode (runs cargo run --release)
 npm start
+```
+
+3. Run using **Node.js** (Legacy):
+
+```bash
+# Install dependencies first
+npm install
+
+# Start the Node server
+npm run node-start
 ```
 
 #### Windows Users

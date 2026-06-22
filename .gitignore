@@ -145,3 +145,6 @@ Thumbs.db
 # Generated PWA Files
 /public/*manifest.json
 /public/Assets/*manifest.json
+
+# Rust build artifacts
+target/

@@ -4,8 +4,10 @@
   "description": "A simple notepad application",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js",
+    "start": "cargo run --release",
+    "dev": "cargo run",
+    "node-start": "node server.js",
+    "node-dev": "nodemon server.js",
     "generate-icons": "node scripts/generate-png.js"
   },
   "dependencies": {
