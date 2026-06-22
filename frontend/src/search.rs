@@ -115,9 +115,9 @@ pub fn search_modal(props: &SearchModalProps) -> Html {
                             
                             html! {
                                 <li onclick={on_click} style="cursor: pointer;">
-                                    <strong>{&item.name}</strong>
+                                    <div>{highlight_query(&item.name, &q_val)}</div>
                                     <div style="font-size: 0.85em; opacity: 0.7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
-                                        {render_snippet(&item.content, &q_val)}
+                                        {format!("[{}]", item.r#match)}
                                     </div>
                                 </li>
                             }
@@ -129,38 +129,41 @@ pub fn search_modal(props: &SearchModalProps) -> Html {
     }
 }
 
-fn render_snippet(content: &str, query: &str) -> Html {
+fn highlight_query(text: &str, query: &str) -> Html {
     if query.is_empty() {
-        let clean_content: String = content.chars().take(100).map(|c| if c == '\n' { ' ' } else { c }).collect();
-        return html! { <span>{clean_content}{if content.chars().count() > 100 { "..." } else { "" }}</span> };
+        return html! { <>{text}</> };
     }
 
-    let clean_content: String = content.replace('\n', " ");
-    let query_lower = query.to_lowercase();
-    let content_lower = clean_content.to_lowercase();
+    let text_chars: Vec<char> = text.chars().collect();
+    let query_chars: Vec<char> = query.to_lowercase().chars().collect();
+    let text_lower_chars: Vec<char> = text.to_lowercase().chars().collect();
 
-    if let Some(idx) = content_lower.find(&query_lower) {
-        let char_indices: Vec<(usize, char)> = clean_content.char_indices().collect();
-        let char_idx = char_indices.iter().position(|&(byte_idx, _)| byte_idx == idx).unwrap_or(0);
-        
-        let start_char = if char_idx > 30 { char_idx - 30 } else { 0 };
-        let end_char = std::cmp::min(char_indices.len(), char_idx + query.chars().count() + 60);
+    let mut result = Vec::new();
+    let mut i = 0;
+    let text_len = text_chars.len();
+    let query_len = query_chars.len();
 
-        let prefix: String = char_indices[start_char..char_idx].iter().map(|&(_, c)| c).collect();
-        let matched: String = char_indices[char_idx..char_idx + query.chars().count()].iter().map(|&(_, c)| c).collect();
-        let suffix: String = char_indices[char_idx + query.chars().count()..end_char].iter().map(|&(_, c)| c).collect();
-
-        html! {
-            <span>
-                {if start_char > 0 { "..." } else { "" }}
-                {prefix}
-                <mark>{matched}</mark>
-                {suffix}
-                {if end_char < char_indices.len() { "..." } else { "" }}
-            </span>
+    while i < text_len {
+        let mut is_match = false;
+        if i + query_len <= text_len {
+            is_match = true;
+            for j in 0..query_len {
+                if text_lower_chars[i + j] != query_chars[j] {
+                    is_match = false;
+                    break;
+                }
+            }
         }
-    } else {
-        let clean_short: String = clean_content.chars().take(100).collect();
-        html! { <span>{clean_short}{if clean_content.chars().count() > 100 { "..." } else { "" }}</span> }
+
+        if is_match {
+            let matched_str: String = text_chars[i..i + query_len].iter().collect();
+            result.push(html! { <mark>{matched_str}</mark> });
+            i += query_len;
+        } else {
+            result.push(html! { {text_chars[i].to_string()} });
+            i += 1;
+        }
     }
+
+    html! { <>{for result}</> }
 }

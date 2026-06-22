@@ -30,5 +30,6 @@ impl Default for Settings {
 pub struct SearchItem {
     pub id: String,
     pub name: String,
-    pub content: String,
+    #[serde(rename = "match")]
+    pub r#match: String,
 }
