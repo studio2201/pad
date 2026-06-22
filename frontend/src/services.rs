@@ -17,7 +17,7 @@ impl StorageService {
                     .flatten()
                     .or_else(|| s.get_item("dumbpad_theme").ok().flatten())
             })
-            .unwrap_or_else(|| "light".to_string())
+            .unwrap_or_else(|| "dark".to_string())
     }
 
     pub fn set_theme(theme: &str) {
