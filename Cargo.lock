@@ -1665,6 +1665,7 @@ name = "rustpad-frontend"
 version = "1.0.5"
 dependencies = [
  "chrono",
+ "futures-channel",
  "futures-util",
  "gloo-net 0.6.0",
  "gloo-storage 0.3.0",
