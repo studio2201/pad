@@ -72,8 +72,10 @@ impl AppStateInner {
                 let mut truncated_content = item.content.clone();
 
                 let mut r#match = "notepad".to_string();
-                let name_truncated = if item.name.len() >= 20 {
-                    format!("{}...", &item.name[..20].trim())
+                let name_char_count = item.name.chars().count();
+                let name_truncated = if name_char_count >= 20 {
+                    let truncated: String = item.name.chars().take(20).collect();
+                    format!("{}...", truncated.trim())
                 } else {
                     item.name.clone()
                 };
@@ -81,32 +83,47 @@ impl AppStateInner {
                 if !is_filename_match {
                     r#match = format!("content in {}", name_truncated);
                     
-                    if let Some(match_index) = content_lower.find(&query_lower) {
-                        let mut start = match_index;
-                        let mut space_count = 0;
-                        while start > 0 && space_count < 3 {
-                            start -= 1;
-                            if item.content.chars().nth(start) == Some(' ') {
-                                space_count += 1;
+                    if let Some(match_byte_idx) = content_lower.find(&query_lower) {
+                        let char_boundaries: Vec<(usize, char)> = item.content.char_indices().collect();
+                        
+                        if let Some(match_char_idx) = char_boundaries.iter().position(|&(b_idx, _)| b_idx == match_byte_idx) {
+                            let mut start_char_idx = match_char_idx;
+                            let mut space_count = 0;
+                            while start_char_idx > 0 && space_count < 3 {
+                                start_char_idx -= 1;
+                                if char_boundaries[start_char_idx].1 == ' ' {
+                                    space_count += 1;
+                                }
+                            }
+
+                            let mut end_char_idx = match_char_idx + query.chars().count();
+                            while end_char_idx < char_boundaries.len() && (end_char_idx - start_char_idx) < 25 {
+                                end_char_idx += 1;
+                            }
+
+                            let start_byte_idx = char_boundaries[start_char_idx].0;
+                            let end_byte_idx = if end_char_idx < char_boundaries.len() {
+                                char_boundaries[end_char_idx].0
+                            } else {
+                                item.content.len()
+                            };
+
+                            let snippet = item.content[start_byte_idx..end_byte_idx].trim().to_string();
+                            truncated_content = if start_char_idx > 0 {
+                                format!("...{}", snippet)
+                            } else {
+                                snippet
+                            };
+                            if end_char_idx < char_boundaries.len() {
+                                truncated_content = format!("{}...", truncated_content);
                             }
                         }
-
-                        let mut end = match_index + query.len();
-                        while end < item.content.len() && (end - start) < 25 {
-                            end += 1;
+                    } else {
+                        let content_char_count = item.content.chars().count();
+                        if content_char_count > 20 {
+                            let truncated: String = item.content.chars().take(20).collect();
+                            truncated_content = format!("{}...", truncated.trim());
                         }
-
-                        let snippet = item.content[start..end].trim().to_string();
-                        truncated_content = if start > 0 {
-                            format!("...{}", snippet)
-                        } else {
-                            snippet
-                        };
-                        if end < item.content.len() {
-                            truncated_content = format!("{}...", truncated_content);
-                        }
-                    } else if item.content.len() > 20 {
-                        truncated_content = format!("{}...", &item.content[..20].trim());
                     }
                 }
 
