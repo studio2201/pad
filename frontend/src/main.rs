@@ -128,7 +128,13 @@ pub fn app() -> Html {
     };
 
     let toggle_theme = Callback::from(move |_| {
-        let next = if StorageService::get_theme() == "dark" { "light" } else { "dark" };
+        let next = match StorageService::get_theme().as_str() {
+            "light" => "dark",
+            "dark" => "nord",
+            "nord" => "dracula",
+            "dracula" => "sepia",
+            _ => "light",
+        };
         StorageService::set_theme(next);
         let _ = window().and_then(|w| w.document()).and_then(|d| d.document_element()).map(|r| r.set_attribute("data-theme", next));
     });

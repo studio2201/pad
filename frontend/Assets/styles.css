@@ -33,6 +33,54 @@
     --code-markdown: rgba(96, 165, 250, 0.2);
 }
 
+[data-theme="nord"] {
+    --bg-color: #2e3440;
+    --text-color: #d8dee9;
+    --primary-color: #88c0d0;
+    --secondary-color: #4c566a;
+    --header-bg: #242933;
+    --textarea-bg: #3b4252;
+    --modal-bg: #3b4252;
+    --button-hover: #434c5e;
+    --danger-color: #bf616a;
+    --danger-hover: #d08770;
+    --code-markdown: rgba(136, 192, 208, 0.2);
+    --success-status-bg: rgba(136, 192, 208, 0.5);
+    --danger-status-bg: rgba(191, 97, 106, 0.5);
+}
+
+[data-theme="dracula"] {
+    --bg-color: #1e1f29;
+    --text-color: #f8f8f2;
+    --primary-color: #bd93f9;
+    --secondary-color: #44475a;
+    --header-bg: #191a21;
+    --textarea-bg: #282a36;
+    --modal-bg: #282a36;
+    --button-hover: #44475a;
+    --danger-color: #ff5555;
+    --danger-hover: #ff79c6;
+    --code-markdown: rgba(189, 147, 249, 0.2);
+    --success-status-bg: rgba(189, 147, 249, 0.5);
+    --danger-status-bg: rgba(255, 85, 85, 0.5);
+}
+
+[data-theme="sepia"] {
+    --bg-color: #f4ecd8;
+    --text-color: #433422;
+    --primary-color: #b58900;
+    --secondary-color: #e4d7ba;
+    --header-bg: #eae0c9;
+    --textarea-bg: #fdf6e3;
+    --modal-bg: #fdf6e3;
+    --button-hover: #eae0c9;
+    --danger-color: #dc322f;
+    --danger-hover: #cb4b16;
+    --code-markdown: rgba(181, 137, 0, 0.2);
+    --success-status-bg: rgba(181, 137, 0, 0.5);
+    --danger-status-bg: rgba(220, 50, 47, 0.5);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -597,6 +645,27 @@ main {
 
 .login-container #theme-toggle:hover {
     background-color: var(--secondary-color);
+}
+
+.pin-input-field {
+    text-align: center;
+    font-size: 2rem;
+    letter-spacing: 0.5em;
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--secondary-color);
+    border-radius: 8px;
+    padding: 10px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.pin-input-field:focus {
+    border-color: var(--primary-color);
 }
 
 /* Remote cursor styling */
