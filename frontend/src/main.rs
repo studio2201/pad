@@ -8,6 +8,7 @@ mod editor;
 mod modals;
 mod shortcuts;
 mod collab;
+mod collab_utils;
 mod header;
 mod toolbar;
 use yew::prelude::*;
