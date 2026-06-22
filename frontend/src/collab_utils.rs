@@ -27,6 +27,7 @@ use wasm_bindgen::prelude::*;
         cursor.style.left = (marker.offsetLeft + editor.offsetLeft) + 'px';
         cursor.style.height = style.lineHeight || '1.2em';
         cursor.style.display = 'block';
+        tempDiv.remove();
     }
     export function remove_peer_cursor(userId) {
         const cursor = document.getElementById('cursor-' + userId);

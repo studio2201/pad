@@ -1,5 +1,4 @@
 use yew::prelude::*;
-use gloo_storage::{LocalStorage, Storage};
 
 #[derive(Clone, PartialEq)]
 pub struct LocaleContext {
@@ -31,11 +30,18 @@ pub fn detect_browser_locale() -> String {
 }
 
 pub fn get_saved_locale() -> String {
-    LocalStorage::get("rustpad_locale").unwrap_or_else(|_| detect_browser_locale())
+    web_sys::window()
+        .and_then(|w| w.local_storage().ok().flatten())
+        .and_then(|s| s.get_item("rustpad_locale").ok().flatten())
+        .unwrap_or_else(detect_browser_locale)
 }
 
 pub fn set_saved_locale(locale: &str) {
-    let _ = LocalStorage::set("rustpad_locale", locale);
+    if let Some(w) = web_sys::window() {
+        if let Some(s) = w.local_storage().ok().flatten() {
+            let _ = s.set_item("rustpad_locale", locale);
+        }
+    }
 }
 
 pub fn translate(lang: &str, key: &str) -> String {

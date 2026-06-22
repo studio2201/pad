@@ -1,6 +1,6 @@
 # --- Stage 1: Build the Rust Backend and Frontend ---
 FROM rust:alpine AS rust-builder
-RUN apk add --no-cache musl-dev wget
+RUN apk add --no-cache musl-dev wget gzip brotli
 
 # Install WebAssembly target and Trunk builder
 RUN rustup target add wasm32-unknown-unknown
@@ -33,7 +33,8 @@ COPY frontend/index.html ./frontend/
 COPY frontend/service-worker.js ./frontend/
 COPY frontend/Assets ./frontend/Assets
 
-RUN cd frontend && trunk build --release
+RUN cd frontend && trunk build --release && \
+    find dist -type f \( -name "*.js" -o -name "*.wasm" -o -name "*.css" -o -name "*.html" -o -name "*.svg" -o -name "*.json" \) -exec gzip -k -9 {} \; -exec brotli -k -Z {} \;
 RUN cargo build --release --bin rustpad
 
 # --- Stage 2: Final Runtime Container ---

@@ -1,5 +1,6 @@
 use yew::prelude::*;
 use pulldown_cmark::{Parser, Options, html};
+use wasm_bindgen::JsCast;
 
 #[derive(Properties, PartialEq)]
 pub struct PreviewProps {
@@ -12,6 +13,42 @@ const TIP_SVG: &str = "<svg class=\"octicon octicon-light-bulb mr-2\" viewBox=\"
 const IMPORTANT_SVG: &str = "<svg class=\"octicon octicon-report mr-2\" viewBox=\"0 0 16 16\" version=\"1.1\" width=\"16\" height=\"16\" aria-hidden=\"true\" fill=\"currentColor\"><path d=\"M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v12.5A1.75 1.75 0 0 1 14.25 16H1.75A1.75 1.75 0 0 1 0 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25Zm6.25 3.5a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM6.75 7.25h2.5a.75.75 0 0 1 0 1.5H8v2.5a.75.75 0 0 1-1.5 0v-3.25a.75.75 0 0 1 .25-.5Z\"></path></svg>";
 const WARNING_SVG: &str = "<svg class=\"octicon octicon-alert mr-2\" viewBox=\"0 0 16 16\" version=\"1.1\" width=\"16\" height=\"16\" aria-hidden=\"true\" fill=\"currentColor\"><path d=\"M6.457 1.047a2.25 2.25 0 0 1 3.086 0l5.436 5.436a2.25 2.25 0 0 1 0 3.086l-5.436 5.436a2.25 2.25 0 0 1-3.086 0L1.021 9.569a2.25 2.25 0 0 1 0-3.086Zm1.153 1.153a.75.75 0 0 0-1.06 0L1.114 7.636a.75.75 0 0 0 0 1.06l5.436 5.436a.75.75 0 0 0 1.06 0l5.436-5.436a.75.75 0 0 0 0-1.06L7.61 2.2Zm.39 3.55a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5a.75.75 0 0 1 .75-.75Zm0 7a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z\"></path></svg>";
 const CAUTION_SVG: &str = "<svg class=\"octicon octicon-stop mr-2\" viewBox=\"0 0 16 16\" version=\"1.1\" width=\"16\" height=\"16\" aria-hidden=\"true\" fill=\"currentColor\"><path d=\"M4.47 .22A.75.75 0 0 1 5 0h6a.75.75 0 0 1 .53.22l4.25 4.25c.141.14.22.331.22.53v6a.75.75 0 0 1-.22.53l-4.25 4.25A.75.75 0 0 1 11 16H5a.75.75 0 0 1-.53-.22L.22 11.53A.75.75 0 0 1 0 11V5a.75.75 0 0 1 .22-.53Zm.83 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5H5.3Z\"></path></svg>";
+
+#[wasm_bindgen::prelude::wasm_bindgen(inline_js = "
+    export function sanitize_html(html) {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const clean = (node) => {
+            const kids = Array.from(node.childNodes);
+            for (const kid of kids) {
+                if (kid.nodeType === 1) {
+                    const tag = kid.tagName.toLowerCase();
+                    if (['script', 'iframe', 'object', 'embed', 'link', 'style', 'meta', 'base'].includes(tag)) {
+                        kid.remove();
+                    } else {
+                        const attrs = Array.from(kid.attributes);
+                        for (const attr of attrs) {
+                            const name = attr.name.toLowerCase();
+                            if (name.startsWith('on')) {
+                                kid.removeAttribute(attr.name);
+                            } else if (['href', 'src', 'action'].includes(name)) {
+                                const val = attr.value.trim().toLowerCase();
+                                if (val.startsWith('javascript:') || val.startsWith('data:')) {
+                                    kid.removeAttribute(attr.name);
+                                }
+                            }
+                        }
+                        clean(kid);
+                    }
+                }
+            }
+        };
+        clean(doc.body);
+        return doc.body.innerHTML;
+    }
+")]
+extern "C" {
+    fn sanitize_html(html: &str) -> String;
+}
 
 pub fn parse_markdown(md: &str) -> String {
     let mut options = Options::empty();
@@ -45,12 +82,7 @@ pub fn parse_markdown(md: &str) -> String {
     }
 
     processed = processed.replace("</p>\n</blockquote>", "</p>\n</div>");
-    processed
-}
-
-#[wasm_bindgen::prelude::wasm_bindgen]
-extern "C" {
-    fn eval(code: &str);
+    sanitize_html(&processed)
 }
 
 #[function_component(Preview)]
@@ -58,8 +90,20 @@ pub fn preview(props: &PreviewProps) -> Html {
     let content = props.content.clone();
 
     use_effect_with(content, |_| {
-        eval("setTimeout(() => { if (window.hljs) hljs.highlightAll(); }, 50);");
-        || ()
+        let handle = gloo_timers::callback::Timeout::new(50, move || {
+            if let Some(w) = web_sys::window() {
+                if let Ok(hljs) = js_sys::Reflect::get(&w, &"hljs".into()) {
+                    if !hljs.is_undefined() && !hljs.is_null() {
+                        if let Ok(highlight_all) = js_sys::Reflect::get(&hljs, &"highlightAll".into()) {
+                            if let Some(func) = highlight_all.dyn_ref::<js_sys::Function>() {
+                                let _ = func.call0(&hljs);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        move || drop(handle)
     });
 
     if !props.is_visible {

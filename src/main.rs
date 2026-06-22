@@ -200,7 +200,11 @@ async fn main() {
         .nest("/api", api_routes.merge(public_api_routes))
         .route("/ws", get(handle_socket))
         .route("/health", get(health_check))
-        .fallback_service(ServeDir::new("frontend/dist"))
+        .fallback_service(
+            ServeDir::new("frontend/dist")
+                .precompressed_br()
+                .precompressed_gzip()
+        )
         .layer(cors)
         .with_state(state.clone());
 

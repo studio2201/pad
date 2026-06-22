@@ -1,6 +1,4 @@
 use tokio::fs;
-use fuzzy_matcher::FuzzyMatcher;
-use fuzzy_matcher::skim::SkimMatcherV2;
 use serde::{Serialize, Deserialize};
 
 use crate::state::AppStateInner;
@@ -18,6 +16,34 @@ pub struct SearchResult {
     pub id: String,
     pub name: String,
     pub r#match: String,
+}
+
+fn fuzzy_match_subsequence(text: &str, query: &str) -> Option<i64> {
+    if query.is_empty() {
+        return Some(0);
+    }
+    let mut text_chars = text.chars();
+    let mut score = 0i64;
+    let mut last_match_idx = 0usize;
+    
+    for q_char in query.chars() {
+        let mut found = false;
+        let mut idx_in_text = last_match_idx;
+        while let Some(t_char) = text_chars.next() {
+            if t_char == q_char {
+                let distance = idx_in_text - last_match_idx;
+                score += 100 - (distance as i64 * 5).min(90);
+                last_match_idx = idx_in_text + 1;
+                found = true;
+                break;
+            }
+            idx_in_text += 1;
+        }
+        if !found {
+            return None;
+        }
+    }
+    Some(score)
 }
 
 impl AppStateInner {
@@ -44,16 +70,14 @@ impl AppStateInner {
     pub async fn search_notepads(&self, query: &str) -> Vec<SearchResult> {
         let items = self.index_items.read().await;
         let query_lower = query.to_lowercase();
-        let matcher = SkimMatcherV2::default();
-
         let mut scored_results = Vec::new();
 
         for item in items.iter() {
             let name_lower = item.name.to_lowercase();
             let content_lower = item.content.to_lowercase();
 
-            let name_score = matcher.fuzzy_match(&name_lower, &query_lower);
-            let content_score = matcher.fuzzy_match(&content_lower, &query_lower);
+            let name_score = fuzzy_match_subsequence(&name_lower, &query_lower);
+            let content_score = fuzzy_match_subsequence(&content_lower, &query_lower);
 
             if name_score.is_some() || content_score.is_some() {
                 let score = std::cmp::max(name_score.unwrap_or(0), content_score.unwrap_or(0));
@@ -61,7 +85,6 @@ impl AppStateInner {
             }
         }
 
-        // Sort by search score descending
         scored_results.sort_by(|a, b| b.1.cmp(&a.1));
 
         scored_results

@@ -14,10 +14,10 @@ pub fn use_collab_websocket(
     editor_ref: NodeRef,
 ) -> (Callback<(String, String)>, Callback<usize>) {
     let ws_sender = use_mut_ref(|| None::<futures_channel::mpsc::UnboundedSender<String>>);
-    let user_id = use_state(|| format!("user_{}", chrono::Utc::now().timestamp_millis()));
+    let user_id = use_state(|| format!("user_{}", js_sys::Date::now() as i64));
     let user_color = use_state(|| {
         let colors = vec!["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"];
-        let idx = (chrono::Utc::now().timestamp_millis() % colors.len() as i64) as usize;
+        let idx = ((js_sys::Date::now() as i64) % colors.len() as i64) as usize;
         colors[idx].to_string()
     });
     let offline_queue = use_mut_ref(|| Vec::<String>::new());
@@ -164,7 +164,7 @@ pub fn use_collab_websocket(
                 let msg = json!({
                     "type": "operation",
                     "operation": {
-                        "id": chrono::Utc::now().timestamp_millis(),
+                        "id": js_sys::Date::now() as i64,
                         "type": op.op_type,
                         "position": op.position,
                         "text": op.text,

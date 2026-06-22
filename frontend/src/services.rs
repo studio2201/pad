@@ -1,29 +1,41 @@
 use gloo_net::http::Request;
-use gloo_storage::{LocalStorage, Storage};
 use crate::types::{Notepad, SearchItem, Settings};
 use serde::{Deserialize, Serialize};
 
 pub struct StorageService;
 
 impl StorageService {
+    fn local_storage() -> Option<web_sys::Storage> {
+        web_sys::window()?.local_storage().ok().flatten()
+    }
+
     pub fn get_theme() -> String {
-        LocalStorage::get("rustpad_theme")
-            .or_else(|_| LocalStorage::get("dumbpad_theme"))
-            .unwrap_or_else(|_| "light".to_string())
+        Self::local_storage()
+            .and_then(|s| s.get_item("rustpad_theme").ok().flatten()
+                .or_else(|| s.get_item("dumbpad_theme").ok().flatten()))
+            .unwrap_or_else(|| "light".to_string())
     }
 
     pub fn set_theme(theme: &str) {
-        let _ = LocalStorage::set("rustpad_theme", theme);
+        if let Some(s) = Self::local_storage() {
+            let _ = s.set_item("rustpad_theme", theme);
+        }
     }
 
     pub fn get_settings() -> Settings {
-        LocalStorage::get("rustpad_settings")
-            .or_else(|_| LocalStorage::get("dumbpad_settings"))
+        Self::local_storage()
+            .and_then(|s| s.get_item("rustpad_settings").ok().flatten()
+                .or_else(|| s.get_item("dumbpad_settings").ok().flatten()))
+            .and_then(|val| serde_json::from_str(&val).ok())
             .unwrap_or_default()
     }
 
     pub fn set_settings(settings: &Settings) {
-        let _ = LocalStorage::set("rustpad_settings", settings);
+        if let Some(s) = Self::local_storage() {
+            if let Ok(serialized) = serde_json::to_string(settings) {
+                let _ = s.set_item("rustpad_settings", &serialized);
+            }
+        }
     }
 }
 
