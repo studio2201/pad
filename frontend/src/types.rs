@@ -12,7 +12,6 @@ pub struct Notepad {
 pub struct Settings {
     pub save_status_message_interval: u64,
     pub enable_remote_connection_messages: bool,
-    pub default_markdown_preview_mode: String, // "off", "split", "preview-only"
     pub disable_print_expand: bool,
 }
 
@@ -21,7 +20,6 @@ impl Default for Settings {
         Self {
             save_status_message_interval: 500,
             enable_remote_connection_messages: false,
-            default_markdown_preview_mode: "off".to_string(),
             disable_print_expand: false,
         }
     }

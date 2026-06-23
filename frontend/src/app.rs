@@ -101,13 +101,6 @@ pub fn app() -> Html {
         })
     };
 
-    let current_theme = StorageService::get_theme();
-    let theme_stylesheet_url = if current_theme == "dark" {
-        "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
-    } else {
-        "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
-    };
-
     let ver_val = (*app_version).clone();
 
     html! {
@@ -122,7 +115,6 @@ pub fn app() -> Html {
                 is_pin_required={*is_pin_required}
             />
             <div class="container">
-                <link rel="stylesheet" href={theme_stylesheet_url} />
                 {if !*authenticated {
                     html! { <Login on_login_success={
                         let auth = authenticated.clone();

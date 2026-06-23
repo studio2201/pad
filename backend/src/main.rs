@@ -80,31 +80,6 @@ async fn main() {
         trusted_proxies.clear();
     }
 
-    let highlight_languages_raw = std::env::var("HIGHLIGHT_LANGUAGES").unwrap_or_default();
-    let highlight_languages: Vec<String> = if highlight_languages_raw.trim().is_empty() {
-        [
-            "javascript",
-            "python",
-            "bash",
-            "css",
-            "html",
-            "rust",
-            "json",
-            "markdown",
-            "typescript",
-            "yaml",
-        ]
-        .iter()
-        .map(|&s| s.to_string())
-        .collect()
-    } else {
-        highlight_languages_raw
-            .split(',')
-            .map(|s| s.trim().to_string())
-            .filter(|s| !s.is_empty())
-            .collect()
-    };
-
     let base_url =
         std::env::var("BASE_URL").unwrap_or_else(|_| format!("http://localhost:{}", port));
     let node_env = std::env::var("NODE_ENV").unwrap_or_else(|_| "development".to_string());
@@ -126,7 +101,6 @@ async fn main() {
             lockout_time_minutes,
             trust_proxy: trust_proxy && !trusted_proxy_ips_raw.trim().is_empty(),
             trusted_proxies,
-            highlight_languages,
             base_url,
             node_env,
             version,

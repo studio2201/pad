@@ -48,7 +48,6 @@ pub async fn get_config(State(state): State<AppState>) -> impl IntoResponse {
         "siteTitle": state.config.site_title,
         "baseUrl": state.config.base_url,
         "version": state.config.version,
-        "highlightLanguages": state.config.highlight_languages,
     }))
 }
 

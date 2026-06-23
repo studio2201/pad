@@ -33,7 +33,6 @@ pub struct AppConfig {
     pub lockout_time_minutes: u64,
     pub trust_proxy: bool,
     pub trusted_proxies: Vec<ipnet::IpNet>,
-    pub highlight_languages: Vec<String>,
     pub base_url: String,
     pub node_env: String,
     pub version: String,
