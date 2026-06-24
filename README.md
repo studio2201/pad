@@ -73,3 +73,60 @@ Configure these settings inside your Docker Compose environment or container env
 | `LOCKOUT_TIME` | Bruteforce lockout duration in minutes. | `15` |
 | `TRUST_PROXY` | Set true if deploying behind reverse proxy (Nginx, Cloudflare). | `false` |
 | `TRUSTED_PROXY_IPS` | Comma-separated list of trusted proxy CIDRs/IPs. | None |
+
+## 📂 Repository Structure
+
+```
+.
+├── backend/
+│   ├── Cargo.toml
+│   └── src
+│       ├── config.rs
+│       ├── main.rs
+│       ├── migration.rs
+│       ├── routes
+│       │   ├── auth.rs
+│       │   ├── mod.rs
+│       │   ├── notepads_crud.rs
+│       │   ├── notepads_io.rs
+│       │   └── pages.rs
+│       ├── search.rs
+│       ├── state.rs
+│       ├── tests.rs
+│       ├── utils.rs
+│       └── ws.rs
+└── frontend/
+    ├── Assets
+    │   ├── app.css
+    │   ├── asset-manifest.json
+    │   ├── base.css
+    │   ├── header.css
+    │   ├── login.css
+    │   ├── manifest.json
+    │   ├── rustpad.png
+    │   └── rustpad.svg
+    ├── Cargo.toml
+    ├── index.html
+    ├── service-worker.js
+    └── src
+        ├── app.rs
+        ├── collab.rs
+        ├── collab_utils.rs
+        ├── editor.rs
+        ├── header.rs
+        ├── i18n
+        │   ├── de.rs
+        │   ├── en.rs
+        │   ├── es.rs
+        │   ├── fr.rs
+        │   ├── ja.rs
+        │   ├── pt.rs
+        │   ├── ru.rs
+        │   └── zh.rs
+        ├── i18n.rs
+        ├── login.rs
+        ├── main.rs
+        ├── services.rs
+        ├── storage.rs
+        └── types.rs
+```
