@@ -3,7 +3,7 @@ pub mod notepads_crud;
 pub mod notepads_io;
 pub mod pages;
 
-pub use auth::{get_config, logout, pin_required, require_pin, verify_pin};
+pub use auth::{get_config, logout, pin_required, require_pin, verify_pin, security_headers_middleware};
 pub use notepads_crud::{create_notepad, get_notepads, rename_notepad};
 pub use notepads_io::{delete_notepad, get_notes, save_notes};
 pub use pages::{serve_login, serve_root};

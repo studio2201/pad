@@ -12,6 +12,7 @@ use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
+mod config;
 mod migration;
 mod routes;
 mod search;
@@ -23,8 +24,8 @@ mod ws;
 
 use migration::migrate_all_notepads_to_name_based_files;
 use routes::*;
-use state::{AppConfig, AppState, AppStateInner};
-use utils::parse_trusted_proxies;
+use state::{AppState, AppStateInner};
+pub use config::AppConfig;
 use ws::handle_socket;
 
 #[tokio::main]
@@ -40,52 +41,9 @@ async fn main() {
         .ok()
         .and_then(|s| s.parse::<u16>().ok())
         .unwrap_or(4402);
-    let site_title = std::env::var("RUSTPAD_TITLE")
-        .or_else(|_| std::env::var("RUSTPAD_SITE_TITLE"))
-        .or_else(|_| std::env::var("SITE_TITLE"))
-        .unwrap_or_else(|_| "RustPad".to_string());
-    let pin = std::env::var("RUSTPAD_PIN")
-        .or_else(|_| std::env::var("PIN"))
-        .ok()
-        .filter(|s| !s.is_empty())
-        .filter(|p| p.len() >= 4 && p.len() <= 10 && p.chars().all(|c| c.is_ascii_digit()));
 
-    let cookie_max_age_hours = std::env::var("COOKIE_MAX_AGE")
-        .ok()
-        .and_then(|s| s.parse::<i64>().ok())
-        .unwrap_or(24);
-    let page_history_cookie_age_days = std::env::var("PAGE_HISTORY_COOKIE_AGE")
-        .ok()
-        .and_then(|s| s.parse::<i64>().ok())
-        .unwrap_or(365);
-    let max_attempts = std::env::var("MAX_ATTEMPTS")
-        .ok()
-        .and_then(|s| s.parse::<usize>().ok())
-        .unwrap_or(5);
-    let lockout_time_minutes = std::env::var("LOCKOUT_TIME")
-        .ok()
-        .and_then(|s| s.parse::<u64>().ok())
-        .unwrap_or(15);
-
-    let trust_proxy = std::env::var("TRUST_PROXY")
-        .map(|s| s == "true")
-        .unwrap_or(false);
-    let trusted_proxy_ips_raw = std::env::var("TRUSTED_PROXY_IPS").unwrap_or_default();
-    let mut trusted_proxies = parse_trusted_proxies(&trusted_proxy_ips_raw);
-
-    if trust_proxy && trusted_proxy_ips_raw.trim().is_empty() {
-        eprintln!("CRITICAL WARNING: TRUST_PROXY=true but TRUSTED_PROXY_IPS is not set or empty.");
-        eprintln!(
-            "Trust proxy is disabled for security. Set TRUSTED_PROXY_IPS to enable proxy trust."
-        );
-        trusted_proxies.clear();
-    }
-
-    let base_url =
-        std::env::var("BASE_URL").unwrap_or_else(|_| format!("http://localhost:{}", port));
-    let node_env = std::env::var("NODE_ENV").unwrap_or_else(|_| "development".to_string());
-    let version = env!("CARGO_PKG_VERSION").to_string();
-    let allowed_origins = std::env::var("ALLOWED_ORIGINS").unwrap_or_else(|_| "*".to_string());
+    let config = AppConfig::load_from_env(port);
+    let site_title = config.site_title.clone();
 
     let root_path = PathBuf::from(".");
     let data_dir = root_path.join("data");
@@ -94,20 +52,7 @@ async fn main() {
 
     // Initialize state
     let state: AppState = Arc::new(AppStateInner {
-        config: AppConfig {
-            site_title: site_title.clone(),
-            pin: pin.clone(),
-            cookie_max_age_hours,
-            page_history_cookie_age_days,
-            max_attempts,
-            lockout_time_minutes,
-            trust_proxy: trust_proxy && !trusted_proxy_ips_raw.trim().is_empty(),
-            trusted_proxies,
-            base_url,
-            node_env,
-            version,
-            allowed_origins,
-        },
+        config,
         data_dir,
         notepads_file,
         clients: RwLock::new(HashMap::new()),
@@ -228,6 +173,7 @@ async fn main() {
                 .precompressed_gzip(),
         )
         .layer(cors)
+        .layer(middleware::from_fn(security_headers_middleware))
         .with_state(state.clone());
 
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))

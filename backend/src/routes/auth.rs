@@ -186,8 +186,30 @@ pub async fn logout(jar: CookieJar) -> impl IntoResponse {
     let jar = jar.add(
         Cookie::build((COOKIE_NAME, ""))
             .path("/")
+            .http_only(true)
+            .same_site(SameSite::Strict)
             .max_age(Duration::from_secs(0).try_into().unwrap())
             .build(),
     );
     (jar, axum::Json(serde_json::json!({ "success": true }))).into_response()
+}
+
+pub async fn security_headers_middleware(
+    req: axum::extract::Request,
+    next: axum::middleware::Next,
+) -> axum::response::Response {
+    let mut response = next.run(req).await;
+    let headers = response.headers_mut();
+    
+    headers.insert("X-Frame-Options", axum::http::header::HeaderValue::from_static("DENY"));
+    headers.insert("X-Content-Type-Options", axum::http::header::HeaderValue::from_static("nosniff"));
+    headers.insert("Referrer-Policy", axum::http::header::HeaderValue::from_static("strict-origin-when-cross-origin"));
+    headers.insert(
+        "Content-Security-Policy", 
+        axum::http::header::HeaderValue::from_static(
+            "default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: blob: https:; connect-src 'self' ws: wss: http: https:; font-src 'self'; manifest-src 'self';"
+        )
+    );
+    
+    response
 }

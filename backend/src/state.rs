@@ -23,21 +23,7 @@ pub struct NotepadsJson {
     pub notepads: Vec<Notepad>,
 }
 
-#[derive(Debug, Clone)]
-pub struct AppConfig {
-    pub site_title: String,
-    pub pin: Option<String>,
-    pub cookie_max_age_hours: i64,
-    pub page_history_cookie_age_days: i64,
-    pub max_attempts: usize,
-    pub lockout_time_minutes: u64,
-    pub trust_proxy: bool,
-    pub trusted_proxies: Vec<ipnet::IpNet>,
-    pub base_url: String,
-    pub node_env: String,
-    pub version: String,
-    pub allowed_origins: String,
-}
+pub use crate::config::AppConfig;
 
 pub struct AppStateInner {
     // Config
