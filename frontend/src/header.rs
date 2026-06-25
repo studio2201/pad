@@ -11,6 +11,8 @@ pub struct HeaderProps {
     pub is_pin_required: bool,
     pub disable_print: bool,
     pub enable_translation: bool,
+    pub enable_themes: bool,
+    pub enable_print: bool,
 }
 
 #[function_component(Header)]
@@ -115,31 +117,49 @@ pub fn header(props: &HeaderProps) -> Html {
                 } else {
                     html! {}
                 }}
-                <button id="theme-toggle" class="icon-button" onclick={props.toggle_theme.clone()} aria-label="Toggle theme" title={theme_toggle_tooltip}>
-                    {theme_toggle_icon}
-                </button>
-                <button
-                    id="print-button"
-                    class="icon-button"
-                    onclick={on_print}
-                    disabled={props.disable_print}
-                    title={print_tooltip}
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="6 9 6 2 18 2 18 9" />
-                        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
-                        <rect x="6" y="14" width="12" height="8" />
-                    </svg>
-                </button>
-                <button
-                    id="logout-button"
-                    class="icon-button"
-                    onclick={props.on_logout.clone()}
-                    disabled={!props.is_authenticated || !props.is_pin_required}
-                    data-tooltip={if !props.is_authenticated || !props.is_pin_required { "".to_string() } else { locale.t("logout") }}
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
-                </button>
+                {if props.enable_themes {
+                    html! {
+                        <button id="theme-toggle" class="icon-button" onclick={props.toggle_theme.clone()} aria-label="Toggle theme" title={theme_toggle_tooltip}>
+                            {theme_toggle_icon}
+                        </button>
+                    }
+                } else {
+                    html! {}
+                }}
+                {if props.enable_print {
+                    html! {
+                        <button
+                            id="print-button"
+                            class="icon-button"
+                            onclick={on_print}
+                            disabled={props.disable_print}
+                            title={print_tooltip}
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 6 2 18 2 18 9" />
+                                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                                <rect x="6" y="14" width="12" height="8" />
+                            </svg>
+                        </button>
+                    }
+                } else {
+                    html! {}
+                }}
+                {if props.is_pin_required {
+                    html! {
+                        <button
+                            id="logout-button"
+                            class="icon-button"
+                            onclick={props.on_logout.clone()}
+                            disabled={!props.is_authenticated || !props.is_pin_required}
+                            data-tooltip={if !props.is_authenticated || !props.is_pin_required { "".to_string() } else { locale.t("logout") }}
+                        >
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
+                        </button>
+                    }
+                } else {
+                    html! {}
+                }}
             </div>
         </header>
     }

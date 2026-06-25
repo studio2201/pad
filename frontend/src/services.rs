@@ -85,6 +85,10 @@ pub struct VerifyPinResponse {
     pub error: Option<String>,
 }
 
+fn default_true() -> bool {
+    true
+}
+
 #[derive(Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ConfigResponse {
@@ -92,6 +96,10 @@ pub struct ConfigResponse {
     pub site_title: String,
     #[serde(default)]
     pub enable_translation: bool,
+    #[serde(default = "default_true")]
+    pub enable_themes: bool,
+    #[serde(default = "default_true")]
+    pub enable_print: bool,
 }
 
 #[derive(Deserialize)]

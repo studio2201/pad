@@ -16,18 +16,37 @@ pub fn app() -> Html {
     let active_notification = use_state(|| None::<(String, String)>);
     let is_pin_required = use_state(|| true);
     let enable_translation = use_state(|| false);
+    let enable_themes = use_state(|| true);
+    let enable_print = use_state(|| true);
 
     {
         let version = app_version.clone();
         let site_title = site_title.clone();
         let pin_req = is_pin_required.clone();
         let enable_trans = enable_translation.clone();
+        let enable_themes = enable_themes.clone();
+        let enable_print = enable_print.clone();
+        let theme = theme.clone();
         use_effect_with((), move |_| {
             spawn_local(async move {
                 if let Ok(config) = ApiService::get_config().await {
                     version.set(config.version);
                     site_title.set(config.site_title.clone());
                     enable_trans.set(config.enable_translation);
+                    enable_themes.set(config.enable_themes);
+                    enable_print.set(config.enable_print);
+                    if !config.enable_themes {
+                        theme.set("tourian".to_string());
+                        StorageService::set_theme("tourian");
+                        if let Some(win) = web_sys::window() {
+                            if let Some(doc) = win.document() {
+                                if let Some(el) = doc.document_element() {
+                                    let _ = el.set_attribute("data-theme", "tourian");
+                                    let _ = el.set_attribute("class", "tourian");
+                                }
+                            }
+                        }
+                    }
                     if let Some(win) = web_sys::window() {
                         if let Some(doc) = win.document() {
                             doc.set_title(&config.site_title);
@@ -121,6 +140,8 @@ pub fn app() -> Html {
                 is_pin_required={*is_pin_required}
                 disable_print={*is_content_empty}
                 enable_translation={trans_val}
+                enable_themes={*enable_themes}
+                enable_print={*enable_print}
             />
             <div class="container">
                 {if !*authenticated {

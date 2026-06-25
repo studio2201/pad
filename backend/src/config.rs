@@ -13,6 +13,8 @@ pub struct AppConfig {
     pub version: String,
     pub allowed_origins: String,
     pub enable_translation: bool,
+    pub enable_themes: bool,
+    pub enable_print: bool,
 }
 
 impl AppConfig {
@@ -72,6 +74,14 @@ impl AppConfig {
             .map(|v| v == "true" || v == "on")
             .unwrap_or(false);
 
+        let enable_themes = std::env::var("ENABLE_THEMES")
+            .map(|v| v != "false" && v != "off")
+            .unwrap_or(true);
+
+        let enable_print = std::env::var("ENABLE_PRINT")
+            .map(|v| v != "false" && v != "off")
+            .unwrap_or(true);
+
         Self {
             site_title,
             pin,
@@ -86,6 +96,8 @@ impl AppConfig {
             version,
             allowed_origins,
             enable_translation,
+            enable_themes,
+            enable_print,
         }
     }
 }
