@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("Fuzzy Busca em Blocos de Notas"),
         "search_placeholder" => Some("Digite o título ou conteúdo para buscar..."),
         "search_no_results" => Some("No matching notepads found."),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("Bloqueado. Tente novamente em 15 minutos."),
         "login_prompt" => Some("Digite o PIN de autenticação para acessar"),
         "login_btn" => Some("Unlock"),

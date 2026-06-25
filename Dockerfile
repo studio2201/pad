@@ -17,8 +17,8 @@ COPY backend/Cargo.toml ./backend/
 RUN mkdir -p backend/src && echo "fn main() {}" > backend/src/main.rs
 RUN mkdir -p frontend/src && echo "fn main() {}" > frontend/src/main.rs
 RUN cargo build --release
-RUN rm -f target/release/deps/rustpad*
-RUN cargo build --release --target wasm32-unknown-unknown -p rustpad-frontend
+RUN rm -f target/release/deps/log*
+RUN cargo build --release --target wasm32-unknown-unknown -p log-frontend
 
 # Copy actual source code and compile
 COPY backend/src ./backend/src
@@ -29,11 +29,11 @@ COPY frontend/Assets ./frontend/Assets
 
 RUN cd frontend && trunk build --release && \
     find dist -type f \( -name "*.js" -o -name "*.wasm" -o -name "*.css" -o -name "*.html" -o -name "*.svg" -o -name "*.json" \) -exec gzip -k -9 {} \; -exec brotli -k -Z {} \;
-RUN cargo build --release --bin rustpad
+RUN cargo build --release --bin log
 
 # --- Stage 2: Final Runtime Container ---
 FROM alpine:latest
-LABEL org.opencontainers.image.source="https://github.com/UberMetroid/RustPad"
+LABEL org.opencontainers.image.source="https://github.com/UberMetroid/Log"
 
 WORKDIR /app
 
@@ -42,7 +42,7 @@ ENV NODE_ENV=production
 ENV LOG_DIR=/app/log
 
 # Copy compiled Rust binary
-COPY --from=rust-builder /app/target/release/rustpad /app/rustpad
+COPY --from=rust-builder /app/target/release/log /app/log
 
 # Copy compiled frontend assets
 COPY --from=rust-builder /app/frontend/dist /app/frontend/dist
@@ -59,4 +59,4 @@ VOLUME /app/data
 
 EXPOSE 4402
 
-CMD ["/app/rustpad"]
+CMD ["/app/log"]

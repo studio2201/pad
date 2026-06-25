@@ -10,7 +10,7 @@ use std::time::Duration;
 use crate::state::AppState;
 use crate::utils::{get_client_ip, hash_pin, secure_compare};
 
-pub const COOKIE_NAME: &str = "RUSTPAD_PIN";
+pub const COOKIE_NAME: &str = "LOG_PIN";
 
 // Authenticated helper
 pub fn is_authenticated(jar: &CookieJar, state: &AppState, headers: &HeaderMap) -> bool {

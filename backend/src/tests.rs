@@ -20,13 +20,13 @@ fn test_secure_compare() {
 
 #[test]
 fn test_fuzzy_match_subsequence() {
-    let score_exact = search::fuzzy_match_subsequence("rustpad", "rustpad");
+    let score_exact = search::fuzzy_match_subsequence("log", "log");
     assert!(score_exact.is_some());
 
-    let score_sub = search::fuzzy_match_subsequence("rustpad", "rpd");
+    let score_sub = search::fuzzy_match_subsequence("log", "rpd");
     assert!(score_sub.is_some());
 
-    let score_none = search::fuzzy_match_subsequence("rustpad", "xyz");
+    let score_none = search::fuzzy_match_subsequence("log", "xyz");
     assert!(score_none.is_none());
 }
 

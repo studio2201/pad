@@ -53,7 +53,7 @@ jobs:
       - name: Generate Docker Metadata
         id: meta
         run: |
-          LOWER_IMAGE_NAME_DOCKER=$(echo "ubermetroid/rustpad" | tr '[:upper:]' '[:lower:]')
+          LOWER_IMAGE_NAME_DOCKER=$(echo "ubermetroid/log" | tr '[:upper:]' '[:lower:]')
           VERSION=${{ steps.package_version.outputs.VERSION }}
           
           # Initialize tags list

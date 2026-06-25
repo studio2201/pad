@@ -1,10 +1,10 @@
-# RustPad - Real-Time Collaborative Notepad
+# Log - Real-Time Collaborative Notepad
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/UberMetroid/RustPad/main/frontend/Assets/rustpad.png" alt="RustPad Logo" width="128" height="128">
+  <img src="https://raw.githubusercontent.com/UberMetroid/Log/main/frontend/Assets/log.png" alt="Log Logo" width="128" height="128">
 </p>
 
-RustPad is a collaborative real-time notepad and text editor designed for minimal resource usage, zero external JS library bloat, and fast load speeds. Built with a Rust (Axum/Tokio) backend and a WebAssembly (Yew) frontend.
+Log is a collaborative real-time notepad and text editor designed for minimal resource usage, zero external JS library bloat, and fast load speeds. Built with a Rust (Axum/Tokio) backend and a WebAssembly (Yew) frontend.
 
 ---
 
@@ -17,9 +17,9 @@ RustPad is a collaborative real-time notepad and text editor designed for minima
 ```yaml
 version: '3'
 services:
-  rustpad:
-    image: ubermetroid/rustpad:latest
-    container_name: rustpad
+  log:
+    image: ubermetroid/log:latest
+    container_name: log
     restart: unless-stopped
     ports:
       - 4402:4402
@@ -28,8 +28,8 @@ services:
     environment:
       - PORT=4402
       - BASE_URL=http://localhost:4402
-      - RUSTPAD_PIN=1234
-      - SITE_TITLE=RustPad
+      - LOG_PIN=1234
+      - SITE_TITLE=Log
       - TRUST_PROXY=false
 ```
 
@@ -47,12 +47,12 @@ Run the following command to start the container:
 
 ```bash
 docker run -d \
-  --name rustpad \
+  --name log \
   --restart unless-stopped \
   -p 4402:4402 \
   -v $(pwd)/data:/app/data \
-  -e RUSTPAD_PIN=1234 \
-  ubermetroid/rustpad:latest
+  -e LOG_PIN=1234 \
+  ubermetroid/log:latest
 ```
 
 ---
@@ -64,10 +64,10 @@ Configure these settings inside your Docker Compose environment or container env
 | Variable | Description | Default |
 | :--- | :--- | :--- |
 | `PORT` | The port number the backend HTTP server will bind to inside the container. | `4402` |
-| `SITE_TITLE` | Custom website title rendered in navigation headers, browser tabs, and PWA manifest. *(Supports fallback `RUSTRUSTPAD_TITLE`)* | `RustPad` |
+| `SITE_TITLE` | Custom website title rendered in navigation headers, browser tabs, and PWA manifest. *(Supports fallback `RUSTLOG_TITLE`)* | `Log` |
 | `BASE_URL` | Application base URL. Essential when deploying behind reverse proxies to ensure redirect and websocket links are resolved correctly. | `http://localhost:4402` |
 | `ALLOWED_ORIGINS` | Comma-separated list of allowed HTTP request origins (CORS filter). Use `*` to allow all origins. | `*` |
-| `RUSTPAD_PIN` | Optional 4–10 digit PIN (numerical only) to lock access to the interface. Leave empty for public mode. | None |
+| `LOG_PIN` | Optional 4–10 digit PIN (numerical only) to lock access to the interface. Leave empty for public mode. | None |
 | `TZ` | Timezone for the container processes and logs. | `UTC` |
 | `ENABLE_TRANSLATION` | Enable the multi-language / translation selector in the navigation header (true/false). | `false` |
 | `ENABLE_THEMES` | Enable the Super Metroid theme selector in the navigation header (true/false). | `true` |
@@ -106,8 +106,8 @@ Configure these settings inside your Docker Compose environment or container env
     │   ├── header.css
     │   ├── login.css
     │   ├── manifest.json
-    │   ├── rustpad.png
-    │   └── rustpad.svg
+    │   ├── log.png
+    │   └── log.svg
     ├── Cargo.toml
     ├── index.html
     ├── service-worker.js
@@ -133,3 +133,8 @@ Configure these settings inside your Docker Compose environment or container env
         ├── storage.rs
         └── types.rs
 ```
+
+
+---
+
+*Note: This repository was forked from [RustPad](https://github.com/UberMetroid/RustPad).*

@@ -2,7 +2,7 @@
 //
 // Provides unified read/write methods with quote stripping.
 //
-// Copyright (c) 2026 RustPad Authors. All rights reserved.
+// Copyright (c) 2026 Log Authors. All rights reserved.
 
 pub struct StorageService;
 

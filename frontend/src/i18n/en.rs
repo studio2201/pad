@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("Fuzzy Search Notepads"),
         "search_placeholder" => Some("Type title or content to search..."),
         "search_no_results" => Some("No matching notepads found."),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("Locked Out"),
         "login_prompt" => Some("Enter PIN"),
         "login_btn" => Some("Unlock"),

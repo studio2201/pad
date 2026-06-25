@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("メモのあいまい検索"),
         "search_placeholder" => Some("検索するタイトルまたは内容を入力..."),
         "search_no_results" => Some("No matching notepads found."),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("ロックされました。15分後に再試行してください。"),
         "login_prompt" => Some("認証用のPINを入力してください"),
         "login_btn" => Some("Unlock"),

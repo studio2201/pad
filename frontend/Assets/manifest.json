@@ -5,18 +5,18 @@
   "icons": [
     {
       "sizes": "192x192",
-      "src": "rustpad.png",
+      "src": "log.png",
       "type": "image/png"
     },
     {
       "sizes": "512x512",
-      "src": "rustpad.png",
+      "src": "log.png",
       "type": "image/png"
     }
   ],
-  "name": "RustPad",
+  "name": "Log",
   "orientation": "any",
-  "short_name": "RustPad",
+  "short_name": "Log",
   "start_url": "/",
   "theme_color": "#000000"
 }

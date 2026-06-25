@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("Notizblöcke durchsuchen"),
         "search_placeholder" => Some("Titel oder Inhalt suchen..."),
         "search_no_results" => Some("No matching notepads found."),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("Gesperrt. Versuchen Sie es in 15 Minuten erneut."),
         "login_prompt" => Some("PIN zur Authentifizierung eingeben"),
         "login_btn" => Some("Unlock"),

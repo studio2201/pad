@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("Recherche de blocs-notes"),
         "search_placeholder" => Some("Saisir titre ou contenu à rechercher..."),
         "search_no_results" => Some("Aucun bloc-notes trouvé."),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("Bloqué. Réessayez dans 15 minutes."),
         "login_prompt" => Some("Entrez le code PIN d'authentification"),
         "login_btn" => Some("Unlock"),

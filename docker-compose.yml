@@ -1,17 +1,17 @@
 services:
-  rustpad:
-    image: ubermetroid/rustpad:latest
+  log:
+    image: ubermetroid/log:latest
     build: .
-    container_name: rustpad
+    container_name: log
     restart: unless-stopped
     ports:
       - ${PORT:-4402}:4402
     volumes:
-      - ${RUSTPAD_DATA_PATH:-./data}:/app/data
+      - ${LOG_DATA_PATH:-./data}:/app/data
     environment:
       PORT: 4402
-      SITE_TITLE: ${SITE_TITLE:-RustPad}
-      RUSTPAD_PIN: ${RUSTPAD_PIN:-}
+      SITE_TITLE: ${SITE_TITLE:-Log}
+      LOG_PIN: ${LOG_PIN:-}
       BASE_URL: ${BASE_URL:-http://localhost:4402}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-*}
       TZ: ${TZ:-UTC}

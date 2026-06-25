@@ -9,7 +9,7 @@ use tokio::fs;
 use crate::migration::{get_notepad_file_path, sanitize_filename, Notepad};
 use crate::state::{AppState, NotepadsJson};
 
-pub const PAGE_HISTORY_COOKIE: &str = "rustpad_page_history";
+pub const PAGE_HISTORY_COOKIE: &str = "log_page_history";
 
 // API: List notepads
 pub async fn get_notepads(jar: CookieJar, State(state): State<AppState>) -> impl IntoResponse {

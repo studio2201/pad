@@ -29,7 +29,7 @@ impl StorageService {
     }
 
     pub fn get_settings() -> Settings {
-        let val = GenericStorage::get_item("rustpad_settings", "");
+        let val = GenericStorage::get_item("log_settings", "");
         if !val.is_empty() {
             serde_json::from_str(&val).unwrap_or_default()
         } else {
@@ -39,7 +39,7 @@ impl StorageService {
 
     pub fn set_settings(settings: &Settings) {
         if let Ok(serialized) = serde_json::to_string(settings) {
-            GenericStorage::set_item("rustpad_settings", &serialized);
+            GenericStorage::set_item("log_settings", &serialized);
         }
     }
 }

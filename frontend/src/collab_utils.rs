@@ -34,7 +34,7 @@ use wasm_bindgen::prelude::*;
         if (cursor) cursor.remove();
     }
     export function dispatch_peer_count(count) {
-        window.dispatchEvent(new CustomEvent('rustpad:peer_count', { detail: count }));
+        window.dispatchEvent(new CustomEvent('log:peer_count', { detail: count }));
     }
 ")]
 extern "C" {

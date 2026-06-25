@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("模糊搜索便签"),
         "search_placeholder" => Some("输入标题或内容以搜索..."),
         "search_no_results" => Some("无匹配结果。"),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("已锁定。请15分钟后重试。"),
         "login_prompt" => Some("输入身份验证密码以访问"),
         "login_btn" => Some("Unlock"),

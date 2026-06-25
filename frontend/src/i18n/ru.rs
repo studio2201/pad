@@ -25,7 +25,7 @@ pub fn translate(key: &str) -> Option<&'static str> {
         "search_title" => Some("Поиск по блокнотам"),
         "search_placeholder" => Some("Введите заголовок или текст для поиска..."),
         "search_no_results" => Some("Ничего не найдено."),
-        "login_title" => Some("RustPad"),
+        "login_title" => Some("Log"),
         "login_locked" => Some("Заблокировано. Попробуйте через 15 минут."),
         "login_prompt" => Some("Введите PIN-код для доступа"),
         "login_btn" => Some("Unlock"),
