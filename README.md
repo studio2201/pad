@@ -1,7 +1,7 @@
 # Log - Real-Time Collaborative Notepad
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/UberMetroid/Log/main/frontend/Assets/log.png" alt="Log Logo" width="128" height="128">
+  <img src="https://raw.githubusercontent.com/UberMetroid/log/main/main/frontend/Assets/log.png" alt="Log Logo" width="128" height="128">
 </p>
 
 Log is a collaborative real-time notepad and text editor designed for minimal resource usage, zero external JS library bloat, and fast load speeds. Built with a Rust (Axum/Tokio) backend and a WebAssembly (Yew) frontend.
