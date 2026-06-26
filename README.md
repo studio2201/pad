@@ -22,10 +22,9 @@ Pad is a collaborative real-time notepad and text editor designed for minimal re
 
 ## 📦 Container Registry
 
-The Docker image is published to the following registries:
+The Docker image is built with **Nix** (no Alpine, fully reproducible) and published to Docker Hub:
 
-*   **Docker Hub (Recommended)**: [ubermetroid/pad](https://hub.docker.com/r/ubermetroid/pad)
-*   **GitHub Container Registry (GHCR)**: [ghcr.io/ubermetroid/pad](https://github.com/UberMetroid/pad/pkgs/container/pad)
+*   **Docker Hub**: [ubermetroid/pad](https://hub.docker.com/r/ubermetroid/pad)
 
 ---
 
@@ -68,10 +67,28 @@ docker compose up -d
 
 ### Building the Image Locally
 
-To build the Docker container locally from the source files:
+To build the Docker container locally from the source files using Nix:
 
 ```bash
-docker build -t ubermetroid/pad:latest .
+nix build .#dockerImage
+docker load < result
+docker tag pad-nix:latest ubermetroid/pad:latest
+```
+
+The image is Nix-built (no Alpine, no Docker daemon dependency for the build).
+For development iteration, use the devShell:
+
+```bash
+nix develop
+```
+
+### APT (Debian / Ubuntu)
+
+Pad is also distributed as a `.deb` package from the official UberMetroid APT repository:
+
+```bash
+curl -fsSL https://ubermetroid.github.io/packages/apt/install.sh | sudo bash
+sudo apt install pad
 ```
 
 
