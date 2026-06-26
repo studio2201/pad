@@ -132,6 +132,7 @@ pub fn app() -> Html {
 
     let is_content_empty = use_state(|| true);
     let trans_val = *enable_translation;
+    let version_url = format!("https://github.com/UberMetroid/pad/releases/tag/v{}", *app_version);
 
     html! {
         <ContextProvider<crate::i18n::LocaleContext> context={locale_context}>
@@ -195,7 +196,7 @@ pub fn app() -> Html {
                     }
                 }}
             </div>
-            <crate::footer::Footer show_version={*show_version} version={(*app_version).clone()} show_github={*show_github}>
+            <crate::footer::Footer show_version={*show_version} version={(*app_version).clone()} show_github={*show_github} {version_url}>
                 {
                     if let Some((msg, cls)) = &*active_notification {
                         html! { <div class={format!("footer-status-text {}", cls)}>{ msg }</div> }
