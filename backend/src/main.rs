@@ -219,6 +219,7 @@ async fn main() {
                 .precompressed_br()
                 .precompressed_gzip(),
         )
+        .layer(tower_http::trace::TraceLayer::new_for_http())
         .layer(cors)
         .layer(middleware::from_fn(security_headers_middleware))
         .with_state(state.clone());
