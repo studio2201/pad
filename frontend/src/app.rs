@@ -19,6 +19,8 @@ pub fn app() -> Html {
     let enable_translation = use_state(|| false);
     let enable_themes = use_state(|| true);
     let enable_print = use_state(|| false);
+    let show_version = use_state(|| true);
+    let show_github = use_state(|| true);
 
     {
         let version = app_version.clone();
@@ -28,6 +30,8 @@ pub fn app() -> Html {
         let enable_themes = enable_themes.clone();
         let enable_print = enable_print.clone();
         let theme = theme.clone();
+        let show_ver = show_version.clone();
+        let show_gh = show_github.clone();
         use_effect_with((), move |_| {
             spawn_local(async move {
                 if let Ok(config) = ApiService::get_config().await {
@@ -36,6 +40,8 @@ pub fn app() -> Html {
                     enable_trans.set(config.enable_translation);
                     enable_themes.set(config.enable_themes);
                     enable_print.set(config.enable_print);
+                    show_ver.set(config.show_version);
+                    show_gh.set(config.show_github);
                     if !config.enable_themes {
                         theme.set("tourian".to_string());
                         StorageService::set_theme("tourian");
@@ -189,7 +195,7 @@ pub fn app() -> Html {
                     }
                 }}
             </div>
-            <footer class="layout-footer">
+            <crate::footer::Footer show_version={*show_version} version={(*app_version).clone()} show_github={*show_github}>
                 {
                     if let Some((msg, cls)) = &*active_notification {
                         html! { <div class={format!("footer-status-text {}", cls)}>{ msg }</div> }
@@ -197,7 +203,7 @@ pub fn app() -> Html {
                         html! { <div class="footer-status-text success">{"Ready"}</div> }
                     }
                 }
-            </footer>
+            </crate::footer::Footer>
         </ContextProvider<crate::i18n::LocaleContext>>
     }
 }

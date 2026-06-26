@@ -17,6 +17,7 @@ mod collab;
 mod collab_utils;
 mod editor;
 mod header;
+mod footer;
 mod i18n;
 mod login;
 mod services;

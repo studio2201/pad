@@ -100,6 +100,10 @@ pub struct ConfigResponse {
     pub enable_themes: bool,
     #[serde(default = "default_true")]
     pub enable_print: bool,
+    #[serde(default = "default_true")]
+    pub show_version: bool,
+    #[serde(default = "default_true")]
+    pub show_github: bool,
 }
 
 #[derive(Deserialize)]
