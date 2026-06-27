@@ -14,7 +14,7 @@ name = "backend"
 path = "src/main.rs"
 
 [dependencies]
-shared-assets = { path = "../frontend/Assets/shared-assets/shared-rust" }
+shared-assets = { path = "../frontend/Assets/shared-assets/shared-rust", version = "3.0.0" }
 axum = { version = "0.8", features = ["ws", "macros"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
