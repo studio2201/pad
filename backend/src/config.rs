@@ -33,8 +33,7 @@ impl AppConfig {
             .and_then(|s| s.parse::<i64>().ok())
             .unwrap_or(365);
 
-        let node_env =
-            std::env::var("NODE_ENV").unwrap_or_else(|_| "development".to_string());
+        let node_env = std::env::var("NODE_ENV").unwrap_or_else(|_| "development".to_string());
 
         Self {
             server,

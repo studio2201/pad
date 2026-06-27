@@ -182,7 +182,8 @@ pub async fn verify_pin(
             .await
             .insert(session_id.clone());
 
-        let cookie_max_age = Duration::from_secs((state.config.server.cookie_max_age_hours * 3600) as u64);
+        let cookie_max_age =
+            Duration::from_secs((state.config.server.cookie_max_age_hours * 3600) as u64);
         let same_site = SameSite::Strict;
 
         let secure = headers
@@ -253,7 +254,9 @@ pub async fn rate_limit_middleware(
     // shared-assets returns a normalized String IP. The per-IP request budget
     // is keyed by the canonicalized IP, so all rate-limit lookups share a key
     // with the lockout table for the same client.
-    let ip_key: std::net::IpAddr = ip.parse().unwrap_or(std::net::IpAddr::V4(std::net::Ipv4Addr::UNSPECIFIED));
+    let ip_key: std::net::IpAddr = ip
+        .parse()
+        .unwrap_or(std::net::IpAddr::V4(std::net::Ipv4Addr::UNSPECIFIED));
 
     if !state.check_rate_limit(ip_key).await {
         let body = serde_json::json!({

@@ -23,7 +23,7 @@ pub async fn get_notes(
     let note_path = if let Some(n) = notepad {
         get_notepad_file_path(&n, &state.data_dir).await
     } else {
-        let sanitized = sanitize_filename(&id);
+        let sanitized = sanitize_filename(&id).unwrap_or_else(|_| "unnamed".to_string());
         state.data_dir.join(format!("{}.txt", sanitized))
     };
 
@@ -63,7 +63,7 @@ pub async fn save_notes(
     let note_path = if let Some(n) = notepad {
         get_notepad_file_path(&n, &state.data_dir).await
     } else {
-        let sanitized = sanitize_filename(&id);
+        let sanitized = sanitize_filename(&id).unwrap_or_else(|_| "unnamed".to_string());
         state.data_dir.join(format!("{}.txt", sanitized))
     };
 
@@ -147,7 +147,7 @@ pub async fn delete_notepad(
     if fs::metadata(&file_path).await.is_ok() {
         let _ = fs::remove_file(&file_path).await;
     } else {
-        let sanitized = sanitize_filename(&id);
+        let sanitized = sanitize_filename(&id).unwrap_or_else(|_| "unnamed".to_string());
         let legacy_path = state.data_dir.join(format!("{}.txt", sanitized));
         let _ = fs::remove_file(&legacy_path).await;
     }

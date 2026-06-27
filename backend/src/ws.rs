@@ -41,7 +41,11 @@ use crate::state::AppState;
 /// default for many setups) used to silently disable CSRF protection on the
 /// WebSocket. Now such configurations will reject all connections until the
 /// operator sets `BASE_URL` to the public URL or runs with `NODE_ENV=development`.
-fn is_origin_allowed(origin_header: Option<&str>, config_base_url: &str, node_env: &str) -> bool {
+pub fn is_origin_allowed(
+    origin_header: Option<&str>,
+    config_base_url: &str,
+    node_env: &str,
+) -> bool {
     if node_env == "development" {
         return true;
     }
@@ -59,7 +63,11 @@ pub async fn handle_socket(
 ) -> impl IntoResponse {
     let origin = headers.get("origin").and_then(|h| h.to_str().ok());
 
-    let allowed = is_origin_allowed(origin, &state.config.server.base_url, &state.config.node_env);
+    let allowed = is_origin_allowed(
+        origin,
+        &state.config.server.base_url,
+        &state.config.node_env,
+    );
 
     if !allowed {
         tracing::warn!(

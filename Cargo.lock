@@ -118,10 +118,10 @@ version = "2.2.0"
 dependencies = [
  "axum",
  "axum-extra",
+ "constant_time_eq",
  "cookie",
  "dotenvy",
  "futures-util",
- "ipnet",
  "notify",
  "percent-encoding",
  "regex",

@@ -1,4 +1,7 @@
-use axum::{Router, middleware, routing::{get, post, put}};
+use axum::{
+    Router, middleware,
+    routing::{get, post, put},
+};
 use shared_assets::middleware::{HstsState, cors_layer, hsts_layer, security_headers_layer};
 use std::collections::HashMap;
 use std::net::SocketAddr;

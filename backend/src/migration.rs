@@ -68,72 +68,6 @@ pub fn sanitize_filename(name: &str) -> Result<String, String> {
     Ok(sanitized)
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn allows_simple_names() {
-        assert_eq!(sanitize_filename("hello").unwrap(), "hello");
-        assert_eq!(sanitize_filename("my notepad").unwrap(), "my notepad");
-        assert_eq!(sanitize_filename("v1.0").unwrap(), "v1.0");
-    }
-
-    #[test]
-    fn strips_dangerous_chars() {
-        assert_eq!(sanitize_filename("a<b").unwrap(), "a_b");
-        assert_eq!(sanitize_filename("foo:bar").unwrap(), "foo_bar");
-        assert_eq!(sanitize_filename("a/b\\c").unwrap(), "a_b_c");
-        assert_eq!(sanitize_filename("?*").unwrap(), "__");
-        assert_eq!(sanitize_filename("bell\x07").unwrap(), "bell_");
-    }
-
-    #[test]
-    fn rejects_empty() {
-        assert!(sanitize_filename("").is_err());
-        assert!(sanitize_filename("   ").is_err());
-        assert!(sanitize_filename("///").is_err());
-        assert!(sanitize_filename("<<>>").is_err());
-    }
-
-    #[test]
-    fn rejects_leading_dot() {
-        assert!(sanitize_filename(".hidden").is_err());
-        assert!(sanitize_filename(". ..foo").is_err());
-    }
-
-    #[test]
-    fn rejects_dot_only() {
-        assert!(sanitize_filename(".").is_err());
-        assert!(sanitize_filename("..").is_err());
-        assert!(sanitize_filename("....").is_err());
-    }
-
-    #[test]
-    fn rejects_windows_reserved() {
-        for name in ["CON", "PRN", "AUX", "NUL", "COM1", "LPT9"] {
-            assert!(sanitize_filename(name).is_err(), "{name} should be rejected");
-            assert!(sanitize_filename(&name.to_lowercase()).is_err(), "{name} (lower) should be rejected");
-        }
-        // "CON.txt" is fine — only the bare device name is reserved.
-        assert!(sanitize_filename("CON.txt").is_ok());
-    }
-
-    #[test]
-    fn caps_length() {
-        let long = "a".repeat(500);
-        let s = sanitize_filename(&long).unwrap();
-        assert!(s.chars().count() <= MAX_FILENAME_LEN);
-    }
-
-    #[test]
-    fn preserves_unicode() {
-        // Unicode characters that aren't in the danger set should pass through.
-        assert_eq!(sanitize_filename("café").unwrap(), "café");
-        assert_eq!(sanitize_filename("日本語").unwrap(), "日本語");
-    }
-}
-
 /// Helper function to get file path for notepad (tries name-based first, falls back to ID-based)
 pub async fn get_notepad_file_path(notepad: &Notepad, data_dir: &Path) -> PathBuf {
     if notepad.id == "default" {
@@ -217,5 +151,77 @@ pub async fn migrate_all_notepads_to_name_based_files(notepads: &[Notepad], data
         );
     } else {
         println!("No notepad files needed migration");
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn allows_simple_names() {
+        assert_eq!(sanitize_filename("hello").unwrap(), "hello");
+        assert_eq!(sanitize_filename("my notepad").unwrap(), "my notepad");
+        assert_eq!(sanitize_filename("v1.0").unwrap(), "v1.0");
+    }
+
+    #[test]
+    fn strips_dangerous_chars() {
+        assert_eq!(sanitize_filename("a<b").unwrap(), "a_b");
+        assert_eq!(sanitize_filename("foo:bar").unwrap(), "foo_bar");
+        assert_eq!(sanitize_filename("a/b\\c").unwrap(), "a_b_c");
+        assert_eq!(sanitize_filename("?*").unwrap(), "__");
+        assert_eq!(sanitize_filename("bell\x07").unwrap(), "bell_");
+    }
+
+    #[test]
+    fn rejects_empty() {
+        assert!(sanitize_filename("").is_err());
+        assert!(sanitize_filename("   ").is_err());
+        assert!(sanitize_filename("///").is_err());
+        assert!(sanitize_filename("<<>>").is_err());
+    }
+
+    #[test]
+    fn rejects_leading_dot() {
+        assert!(sanitize_filename(".hidden").is_err());
+        assert!(sanitize_filename(". ..foo").is_err());
+    }
+
+    #[test]
+    fn rejects_dot_only() {
+        assert!(sanitize_filename(".").is_err());
+        assert!(sanitize_filename("..").is_err());
+        assert!(sanitize_filename("....").is_err());
+    }
+
+    #[test]
+    fn rejects_windows_reserved() {
+        for name in ["CON", "PRN", "AUX", "NUL", "COM1", "LPT9"] {
+            assert!(
+                sanitize_filename(name).is_err(),
+                "{name} should be rejected"
+            );
+            assert!(
+                sanitize_filename(&name.to_lowercase()).is_err(),
+                "{name} (lower) should be rejected"
+            );
+        }
+        // "CON.txt" is fine — only the bare device name is reserved.
+        assert!(sanitize_filename("CON.txt").is_ok());
+    }
+
+    #[test]
+    fn caps_length() {
+        let long = "a".repeat(500);
+        let s = sanitize_filename(&long).unwrap();
+        assert!(s.chars().count() <= MAX_FILENAME_LEN);
+    }
+
+    #[test]
+    fn preserves_unicode() {
+        // Unicode characters that aren't in the danger set should pass through.
+        assert_eq!(sanitize_filename("café").unwrap(), "café");
+        assert_eq!(sanitize_filename("日本語").unwrap(), "日本語");
     }
 }

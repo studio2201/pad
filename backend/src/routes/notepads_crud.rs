@@ -3,7 +3,8 @@ use axum::{
     response::IntoResponse,
 };
 use axum_extra::extract::cookie::{Cookie, CookieJar, SameSite};
-use std::path::{Path, PathBuf};
+use std::path::Path as StdPath;
+
 use std::time::Duration;
 use tokio::fs;
 
@@ -16,7 +17,7 @@ use crate::state::{AppState, NotepadsJson};
 /// name passes the sanitizer, we confirm the resolved file path is contained
 /// in the data directory before writing. Prevents symlink-in-data-dir escapes
 /// (same class of bug the first review flagged in `beam`).
-fn is_path_within_data_dir(path: &Path, data_dir: &Path) -> bool {
+fn is_path_within_data_dir(path: &StdPath, data_dir: &StdPath) -> bool {
     let canonical_data = match data_dir.canonicalize() {
         Ok(p) => p,
         Err(_) => return false,
@@ -26,10 +27,10 @@ fn is_path_within_data_dir(path: &Path, data_dir: &Path) -> bool {
     let canonical_path = match path.canonicalize() {
         Ok(p) => p,
         Err(_) => {
-            if let (Some(parent), Some(file_name)) = (path.parent(), path.file_name()) {
-                if let Ok(cp) = parent.canonicalize() {
-                    return cp.join(file_name).starts_with(&canonical_data);
-                }
+            if let (Some(parent), Some(file_name)) = (path.parent(), path.file_name())
+                && let Ok(cp) = parent.canonicalize()
+            {
+                return cp.join(file_name).starts_with(&canonical_data);
             }
             return false;
         }
