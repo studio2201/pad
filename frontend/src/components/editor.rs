@@ -1,4 +1,4 @@
-use crate::{collab::use_collab_websocket, api::ApiService};
+use crate::{api::ApiService, collab::use_collab_websocket};
 use gloo_timers::callback::Timeout;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;

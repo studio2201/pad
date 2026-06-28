@@ -12,11 +12,11 @@
 //!
 //!     http://www.apache.org/licenses/LICENSE-2.0
 
+mod api;
 mod app;
 mod collab;
 mod collab_utils;
 mod components;
-mod api;
 mod i18n;
 mod storage;
 mod types;

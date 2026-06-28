@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 use crate::storage::StorageService as GenericStorage;
 use shared_assets::theme::{Theme, mapping::Scheme};
 
-
 pub struct StorageService;
 
 impl StorageService {
@@ -25,7 +24,6 @@ impl StorageService {
         }
         theme
     }
-
 
     pub fn set_theme(theme: &str) {
         GenericStorage::set_item("theme", theme);
