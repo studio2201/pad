@@ -807,9 +807,9 @@ checksum = "df3b46402a9d5adb4c86a0cf463f42e19994e3ee891101b1841f30a545cb49a9"
 
 [[package]]
 name = "hybrid-array"
-version = "0.4.12"
+version = "0.4.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9155a582abd142abc056962c29e3ce5ff2ad5469f4246b537ed42c5deba857da"
+checksum = "818356c5132c1fede50f837ca96afbe78ff42413047f4abb886217845e1b6c8c"
 dependencies = [
  "typenum",
 ]
@@ -1425,7 +1425,7 @@ dependencies = [
 [[package]]
 name = "shared-backend"
 version = "3.0.0"
-source = "git+https://github.com/UberMetroid/shared-assets?tag=v3.0.0#bb7a642f249bf91bcdf1f6aee7783508446958ee"
+source = "git+https://github.com/UberMetroid/shared-assets?tag=v3.0.0#1eb8655a30943966b60e6f23972bfc59a3b6380c"
 dependencies = [
  "anyhow",
  "axum",
@@ -1444,7 +1444,7 @@ dependencies = [
 [[package]]
 name = "shared-core"
 version = "3.0.0"
-source = "git+https://github.com/UberMetroid/shared-assets?tag=v3.0.0#bb7a642f249bf91bcdf1f6aee7783508446958ee"
+source = "git+https://github.com/UberMetroid/shared-assets?tag=v3.0.0#1eb8655a30943966b60e6f23972bfc59a3b6380c"
 dependencies = [
  "constant_time_eq",
  "serde",
@@ -1453,7 +1453,7 @@ dependencies = [
 [[package]]
 name = "shared-frontend"
 version = "3.0.0"
-source = "git+https://github.com/UberMetroid/shared-assets?tag=v3.0.0#bb7a642f249bf91bcdf1f6aee7783508446958ee"
+source = "git+https://github.com/UberMetroid/shared-assets?tag=v3.0.0#1eb8655a30943966b60e6f23972bfc59a3b6380c"
 dependencies = [
  "serde",
  "shared-core",
@@ -1951,7 +1951,7 @@ version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c2a7b1c03c876122aa43f3020e6c3c3ee5c05081c9a00739faf7503aeba10d22"
 dependencies = [
- "windows-sys 0.48.0",
+ "windows-sys 0.61.2",
 ]
 
 [[package]]
