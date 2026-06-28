@@ -15,12 +15,9 @@
 mod app;
 mod collab;
 mod collab_utils;
-mod editor;
-mod footer;
-mod header;
+mod components;
+mod api;
 mod i18n;
-mod login;
-mod services;
 mod storage;
 mod types;
 

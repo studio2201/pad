@@ -1,7 +1,7 @@
 use crate::app::{App, Msg};
-use crate::editor::Editor;
-use crate::header::Header;
-use crate::login::Login;
+use crate::components::editor::Editor;
+use crate::components::header::Header;
+use crate::components::pin::Login;
 use shared_assets::i18n::Language;
 use yew::prelude::*;
 
@@ -93,7 +93,7 @@ impl App {
                         }
                     }}
                 </div>
-                <crate::footer::Footer show_version={self.show_version} version={self.app_version.clone()} show_github={self.show_github} {version_url}>
+                <crate::components::footer::Footer show_version={self.show_version} version={self.app_version.clone()} show_github={self.show_github} {version_url}>
                     {
                         if let Some((msg, cls)) = &self.active_notification {
                             html! { <div class={format!("footer-status-text {}", cls)}>{ msg }</div> }
@@ -101,7 +101,7 @@ impl App {
                             html! { <div class="footer-status-text success">{"Ready"}</div> }
                         }
                     }
-                </crate::footer::Footer>
+                </crate::components::footer::Footer>
             </ContextProvider<crate::i18n::LocaleContext>>
         }
     }

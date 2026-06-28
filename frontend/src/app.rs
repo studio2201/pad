@@ -1,7 +1,7 @@
 pub mod update;
 pub mod view;
 
-use crate::services::ConfigResponse;
+use crate::api::ConfigResponse;
 use yew::prelude::*;
 
 pub enum Msg {
