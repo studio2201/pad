@@ -11,6 +11,6 @@ Only the latest release is actively supported for security updates.
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in this project, please do NOT open a public issue. Instead, report it by email to jerydleuck@gmail.com.
+If you discover a security vulnerability in this project, please report it by opening a public issue on GitHub.
 
-We will acknowledge your report within 48 hours and work with you to resolve it.
+We will acknowledge your report and work to resolve it.
