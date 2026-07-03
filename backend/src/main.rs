@@ -3,6 +3,7 @@ use axum::{
     routing::{get, post, put},
 };
 use shared_backend::middleware::{HstsState, cors_layer, hsts_layer, security_headers_layer};
+use shared_backend::tracing_init::{default_log_dir, init_tracing};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::path::PathBuf;
@@ -10,7 +11,6 @@ use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
-use tracing_subscriber::{Layer, layer::SubscriberExt, util::SubscriberInitExt};
 
 mod config;
 mod routes;
@@ -30,56 +30,7 @@ use ws::handle_socket;
 #[tokio::main]
 async fn main() {
     // Initialize logging
-    let log_dir = std::env::var("LOG_DIR").ok().or_else(|| {
-        let data_dir = std::path::Path::new("/app/data");
-        if data_dir.is_dir() {
-            Some("/app/data/log".to_string())
-        } else {
-            Some("/app/log".to_string())
-        }
-    });
-
-    let (file_layer_error, file_layer_app) = if let Some(ref dir) = log_dir {
-        if dir == "off" || dir == "none" || dir == "false" {
-            (None, None)
-        } else {
-            let _ = std::fs::create_dir_all(dir);
-            let error_file = std::fs::OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(std::path::Path::new(dir).join("error.log"))
-                .ok();
-            let app_file = std::fs::OpenOptions::new()
-                .create(true)
-                .append(true)
-                .open(std::path::Path::new(dir).join("app.log"))
-                .ok();
-
-            let error_layer = error_file.map(|file| {
-                tracing_subscriber::fmt::layer()
-                    .with_writer(std::sync::Mutex::new(file))
-                    .with_ansi(false)
-                    .with_filter(tracing_subscriber::filter::LevelFilter::WARN)
-            });
-
-            let app_layer = app_file.map(|file| {
-                tracing_subscriber::fmt::layer()
-                    .with_writer(std::sync::Mutex::new(file))
-                    .with_ansi(false)
-                    .with_filter(tracing_subscriber::filter::LevelFilter::INFO)
-            });
-
-            (error_layer, app_layer)
-        }
-    } else {
-        (None, None)
-    };
-
-    tracing_subscriber::registry()
-        .with(tracing_subscriber::fmt::layer())
-        .with(file_layer_error)
-        .with(file_layer_app)
-        .init();
+    init_tracing(default_log_dir().as_deref());
 
     dotenvy::from_path("/app/data/.env").ok();
     dotenvy::dotenv().ok();

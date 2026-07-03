@@ -1,5 +1,7 @@
 use yew::prelude::*;
 
+pub use shared_frontend::locale::{get_saved_locale, set_saved_locale};
+
 mod de;
 mod en;
 mod es;
@@ -19,45 +21,6 @@ impl LocaleContext {
     pub fn t(&self, key: &str) -> String {
         translate(&self.current, key)
     }
-}
-
-pub fn detect_browser_locale() -> String {
-    if let Some(window) = web_sys::window() {
-        let navigator = window.navigator();
-        if let Some(lang) = navigator.language() {
-            let l = lang.to_lowercase();
-            if l.starts_with("zh") {
-                return "zh".to_string();
-            }
-            if l.starts_with("es") {
-                return "es".to_string();
-            }
-            if l.starts_with("de") {
-                return "de".to_string();
-            }
-            if l.starts_with("ja") {
-                return "ja".to_string();
-            }
-            if l.starts_with("fr") {
-                return "fr".to_string();
-            }
-            if l.starts_with("pt") {
-                return "pt".to_string();
-            }
-            if l.starts_with("ru") {
-                return "ru".to_string();
-            }
-        }
-    }
-    "en".to_string()
-}
-
-pub fn get_saved_locale() -> String {
-    crate::storage::StorageService::get_item("lang", &detect_browser_locale())
-}
-
-pub fn set_saved_locale(locale: &str) {
-    crate::storage::StorageService::set_item("lang", locale);
 }
 
 pub fn translate(lang: &str, key: &str) -> String {

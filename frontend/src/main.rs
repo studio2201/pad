@@ -18,7 +18,6 @@ mod collab;
 mod collab_utils;
 mod components;
 mod i18n;
-mod storage;
 mod types;
 
 use app::App;

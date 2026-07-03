@@ -9,7 +9,7 @@ use yew::prelude::*;
 impl App {
     pub fn create_app(ctx: &Context<Self>) -> Self {
         let theme = StorageService::get_theme();
-        let locale_state = crate::i18n::get_saved_locale();
+        let locale_state = crate::i18n::get_saved_locale().unwrap_or_default();
 
         if let Some(win) = web_sys::window()
             && let Some(doc) = win.document()

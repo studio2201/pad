@@ -3,14 +3,20 @@ use crate::types::{Notepad, SearchItem, Settings};
 use gloo_net::http::Request;
 use serde::{Deserialize, Serialize};
 
-use crate::storage::StorageService as GenericStorage;
+use shared_frontend::storage::StorageService as GenericStorage;
 use shared_frontend::theme::{Theme, mapping::Scheme};
 
 pub struct StorageService;
 
 impl StorageService {
     pub fn get_theme() -> String {
-        let raw = GenericStorage::get_item("theme", Theme::default().name());
+        let storage = GenericStorage::new();
+        let raw = storage.get_item("theme");
+        let raw = if raw.is_empty() {
+            Theme::default().name().to_string()
+        } else {
+            raw
+        };
         let theme = if let Some(scheme) = Scheme::from_id(&raw) {
             scheme.to_theme().name().to_string()
         } else {
@@ -20,17 +26,17 @@ impl StorageService {
                 .to_string()
         };
         if theme != raw {
-            GenericStorage::set_item("theme", &theme);
+            storage.set_item("theme", &theme);
         }
         theme
     }
 
     pub fn set_theme(theme: &str) {
-        GenericStorage::set_item("theme", theme);
+        GenericStorage::new().set_item("theme", theme);
     }
 
     pub fn get_settings() -> Settings {
-        let val = GenericStorage::get_item("log_settings", "");
+        let val = GenericStorage::new().get_item("log_settings");
         if !val.is_empty() {
             serde_json::from_str(&val).unwrap_or_default()
         } else {
@@ -40,7 +46,7 @@ impl StorageService {
 
     pub fn set_settings(settings: &Settings) {
         if let Ok(serialized) = serde_json::to_string(settings) {
-            GenericStorage::set_item("log_settings", &serialized);
+            GenericStorage::new().set_item("log_settings", &serialized);
         }
     }
 }
