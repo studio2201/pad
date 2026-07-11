@@ -1,28 +1,34 @@
+<p align="center">
+  <a href="https://github.com/etecoons">
+    <img src="assets/header.jpg" alt="etecoons banner" width="100%">
+  </a>
+</p>
+
 # Pad — Real-Time Collaborative Notepad <img src="https://raw.githubusercontent.com/etecoons/unraid-apps/main/icons/pad.png" width="48" height="48" alt="pad logo" align="right">
 
 Pad is a collaborative real-time notepad and text editor designed for minimal resource usage, zero external JS library bloat, and fast load speeds. Built with a high-performance Rust (Axum/Tokio) backend and a WebAssembly (Yew) frontend.
 
 ---
 
-## 🏛️ Architecture & Stack
-*   **Frontend**: Yew (WASM)
-*   **Backend**: Axum (Rust) / Tokio (WebSockets)
-*   **Deployment**: UBI container (Red Hat UBI9) on Docker Hub / Unraid / Podman / Docker Compose
+## Architecture & Stack
+* **Frontend**: Yew (WASM)
+* **Backend**: Axum (Rust) / Tokio (WebSockets)
+* **Deployment**: UBI container (Red Hat UBI9) on Docker Hub / Unraid / Podman / Docker Compose
 
 ---
 
 ## 🟢 Key Features
-*   **Real-Time Sync**: Collaborative typing synchronization across users via WebSockets.
-*   **Rich Text Editing**: Document markup format capabilities and auto-saving.
-*   **Access PIN Security**: Lock down the interface with an optional numerical PIN for absolute privacy.
-*   **Dynamic Themes**: Super Metroid UI themes (Crateria, Brinstar, Norfair, Wrecked Ship, Maridia, Tourian).
-*   **Internationalization**: Built-in multilingual translation selector support.
-*   **Print Optimization**: Customized print stylesheet layout and print header action button.
-*   **Performance First**: Tiny resource footprint, zero external JS engine dependencies, and rapid page load speeds.
+* **Real-Time Sync**: Collaborative typing synchronization across users via WebSockets.
+* **Rich Text Editing**: Document markup format capabilities and auto-saving.
+* **Access PIN Security**: Lock down the interface with an optional numerical PIN for absolute privacy.
+* **Dynamic Themes**: Super Metroid UI themes (Crateria, Brinstar, Norfair, Wrecked Ship, Maridia, Tourian).
+* **Internationalization**: Built-in multilingual translation selector support.
+* **Print Optimization**: Customized print stylesheet layout and print header action button.
+* **Performance First**: Tiny resource footprint, zero external JS engine dependencies, and rapid page load speeds.
 
 ---
 
-## 💾 Deployment & Installation
+## Deployment & Installation
 
 ### Container images (Docker Hub)
 
@@ -48,25 +54,25 @@ Create a `docker-compose.yml` file with the following service definition:
 
 ```yaml
 services:
-  pad:
-    image: etecoons/pad:latest
-    container_name: pad
-    restart: unless-stopped
-    ports:
-      - ${PORT:-4402}:4402
-    volumes:
-      - ${PAD_DATA_PATH:-./data}:/app/data
-    environment:
-      PORT: 4402
-      SITE_TITLE: ${PAD_SITE_TITLE:-Pad}
-      PAD_PIN: ${PAD_PIN:-}
-      BASE_URL: ${PAD_BASE_URL:-http://localhost:4402}
-      ALLOWED_ORIGINS: ${PAD_ALLOWED_ORIGINS:-*}
-      TZ: ${TZ:-UTC}
-      ENABLE_TRANSLATION: ${ENABLE_TRANSLATION:-false}
-      ENABLE_THEMES: ${ENABLE_THEMES:-true}
-      ENABLE_PRINT: ${ENABLE_PRINT:-true}
-      MAX_ATTEMPTS: ${MAX_ATTEMPTS:-5}
+ pad:
+ image: etecoons/pad:latest
+ container_name: pad
+ restart: unless-stopped
+ ports:
+ - ${PORT:-4402}:4402
+ volumes:
+ - ${PAD_DATA_PATH:-./data}:/app/data
+ environment:
+ PORT: 4402
+ SITE_TITLE: ${PAD_SITE_TITLE:-Pad}
+ PAD_PIN: ${PAD_PIN:-}
+ BASE_URL: ${PAD_BASE_URL:-http://localhost:4402}
+ ALLOWED_ORIGINS: ${PAD_ALLOWED_ORIGINS:-*}
+ TZ: ${TZ:-UTC}
+ ENABLE_TRANSLATION: ${ENABLE_TRANSLATION:-false}
+ ENABLE_THEMES: ${ENABLE_THEMES:-true}
+ ENABLE_PRINT: ${ENABLE_PRINT:-true}
+ MAX_ATTEMPTS: ${MAX_ATTEMPTS:-5}
 ```
 
 ### Build the UBI image locally
@@ -76,10 +82,10 @@ Requires [Podman](https://podman.io/) (or Docker) and network access to pull bas
 ```bash
 # From the repository root
 podman build --format docker -f Containerfile.ubi \
-  -t docker.io/etecoons/pad:3.0.20 \
-  -t docker.io/etecoons/pad:latest \
-  -t docker.io/etecoons/pad:ubi \
-  .
+ -t docker.io/etecoons/pad:3.0.20 \
+ -t docker.io/etecoons/pad:latest \
+ -t docker.io/etecoons/pad:ubi \
+ .
 
 # Optional: push all three tags
 podman push docker.io/etecoons/pad:3.0.20
@@ -89,7 +95,7 @@ podman push docker.io/etecoons/pad:ubi
 
 ---
 
-## ⚙️ Configuration Options
+## Configuration Options
 
 | Environment Variable | Description | Default |
 | :--- | :--- | :--- |
@@ -114,7 +120,7 @@ podman push docker.io/etecoons/pad:ubi
 
 ---
 
-## 🛠️ Local Development
+## Local Development
 
 Ensure you have the Rust toolchain and Trunk installed.
 
@@ -134,5 +140,5 @@ cd backend && cargo run
 
 ---
 
-## 📄 License
+## License
 Licensed under the [Apache License, Version 2.0](LICENSE). Copyright 2026 etecoons.
