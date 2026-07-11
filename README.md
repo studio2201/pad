@@ -42,12 +42,12 @@ Images are **UBI9-minimal** based (Red Hat Universal Base Image). Tags:
 
 ```bash
 # Pull examples
-podman pull docker.io/ghcr.io/etecoons/pad:latest
-podman pull docker.io/ghcr.io/etecoons/pad:ubi
-podman pull docker.io/ghcr.io/etecoons/pad:3.0.20
+podman pull ghcr.io/etecoons/pad:latest
+podman pull ghcr.io/etecoons/pad:ubi
+podman pull ghcr.io/etecoons/pad:3.0.20
 ```
 
-Hub: [https://hub.docker.com/r/ghcr.io/etecoons/pad](https://hub.docker.com/r/ghcr.io/etecoons/pad)
+Hub: [https://github.com/etecoons/pad/pkgs/container/pad](https://github.com/etecoons/pad/pkgs/container/pad)
 
 ### Docker Compose
 Create a `docker-compose.yml` file with the following service definition:
@@ -82,15 +82,15 @@ Requires [Podman](https://podman.io/) (or Docker) and network access to pull bas
 ```bash
 # From the repository root
 podman build --format docker -f Containerfile.ubi \
- -t docker.io/ghcr.io/etecoons/pad:3.0.20 \
- -t docker.io/ghcr.io/etecoons/pad:latest \
- -t docker.io/ghcr.io/etecoons/pad:ubi \
+ -t ghcr.io/etecoons/pad:3.0.20 \
+ -t ghcr.io/etecoons/pad:latest \
+ -t ghcr.io/etecoons/pad:ubi \
  .
 
 # Optional: push all three tags
-podman push docker.io/ghcr.io/etecoons/pad:3.0.20
-podman push docker.io/ghcr.io/etecoons/pad:latest
-podman push docker.io/ghcr.io/etecoons/pad:ubi
+podman push ghcr.io/etecoons/pad:3.0.20
+podman push ghcr.io/etecoons/pad:latest
+podman push ghcr.io/etecoons/pad:ubi
 ```
 
 ---
