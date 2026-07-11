@@ -1,6 +1,6 @@
 services:
   pad:
-    image: etecoons/pad:latest
+    image: ghcr.io/etecoons/pad:latest
     container_name: pad
     restart: unless-stopped
     ports:
