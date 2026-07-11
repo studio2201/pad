@@ -17,7 +17,7 @@ Pad is a collaborative real-time notepad and text editor designed for minimal re
 
 ---
 
-## 🟢 Key Features
+## Key Features
 * **Real-Time Sync**: Collaborative typing synchronization across users via WebSockets.
 * **Rich Text Editing**: Document markup format capabilities and auto-saving.
 * **Access PIN Security**: Lock down the interface with an optional numerical PIN for absolute privacy.
