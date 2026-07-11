@@ -1,8 +1,8 @@
 use crate::api::ApiService;
+use shared_frontend::i18n::Language;
+use shared_frontend::i18n::strings::{StringKey, lookup};
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
-use shared_frontend::i18n::strings::{lookup, StringKey};
-use shared_frontend::i18n::Language;
 
 #[derive(Properties, PartialEq)]
 pub struct LoginProps {
@@ -80,12 +80,17 @@ pub fn login(props: &LoginProps) -> Html {
                             if res.success {
                                 on_success.emit(());
                             } else {
-                                let status_msg = lookup(StringKey::StatusPinFailure, Language::from_code(&loc_code)).to_string();
+                                let status_msg = lookup(
+                                    StringKey::StatusPinFailure,
+                                    Language::from_code(&loc_code),
+                                )
+                                .to_string();
                                 on_status.emit(Some((status_msg, "error".to_string())));
                                 let on_status_clear = on_status.clone();
                                 gloo_timers::callback::Timeout::new(3000, move || {
                                     on_status_clear.emit(None);
-                                }).forget();
+                                })
+                                .forget();
 
                                 if let Some(err) = res.error {
                                     if err.contains("Too many attempts") {
@@ -126,12 +131,15 @@ pub fn login(props: &LoginProps) -> Html {
                         if res.success {
                             on_success.emit(());
                         } else {
-                            let status_msg = lookup(StringKey::StatusPinFailure, Language::from_code(&loc_code)).to_string();
+                            let status_msg =
+                                lookup(StringKey::StatusPinFailure, Language::from_code(&loc_code))
+                                    .to_string();
                             on_status.emit(Some((status_msg, "error".to_string())));
                             let on_status_clear = on_status.clone();
                             gloo_timers::callback::Timeout::new(3000, move || {
                                 on_status_clear.emit(None);
-                            }).forget();
+                            })
+                            .forget();
 
                             if let Some(err) = res.error {
                                 if err.contains("Too many attempts") {

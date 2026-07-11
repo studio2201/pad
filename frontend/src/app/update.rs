@@ -1,8 +1,8 @@
 use crate::api::{ApiService, StorageService};
 use crate::app::{App, Msg};
-use shared_frontend::theme::Theme;
-use shared_frontend::i18n::strings::{lookup, StringKey};
 use shared_frontend::i18n::Language;
+use shared_frontend::i18n::strings::{StringKey, lookup};
+use shared_frontend::theme::Theme;
 use wasm_bindgen_futures::spawn_local;
 use yew::prelude::*;
 
@@ -87,11 +87,13 @@ impl App {
                 let lang = Language::from_code(&self.locale_state);
                 if auth {
                     let pin_success = lookup(StringKey::StatusPinSuccess, lang).to_string();
-                    ctx.link().send_message(Msg::SetStatus(Some((pin_success, "success".to_string()))));
+                    ctx.link()
+                        .send_message(Msg::SetStatus(Some((pin_success, "success".to_string()))));
                     let link = ctx.link().clone();
                     gloo_timers::callback::Timeout::new(3000, move || {
                         link.send_message(Msg::SetStatus(None));
-                    }).forget();
+                    })
+                    .forget();
 
                     spawn_local(async move {
                         // Fetch default notes to make sure default notepad is initialized
@@ -99,11 +101,13 @@ impl App {
                     });
                 } else {
                     let logout_msg = lookup(StringKey::StatusLogout, lang).to_string();
-                    ctx.link().send_message(Msg::SetStatus(Some((logout_msg, "success".to_string()))));
+                    ctx.link()
+                        .send_message(Msg::SetStatus(Some((logout_msg, "success".to_string()))));
                     let link = ctx.link().clone();
                     gloo_timers::callback::Timeout::new(3000, move || {
                         link.send_message(Msg::SetStatus(None));
-                    }).forget();
+                    })
+                    .forget();
                 }
                 true
             }
@@ -133,11 +137,13 @@ impl App {
                 self.theme = next.name().to_string();
                 let lang = Language::from_code(&self.locale_state);
                 let theme_msg = lookup(StringKey::StatusThemeChanged, lang).to_string();
-                ctx.link().send_message(Msg::SetStatus(Some((theme_msg, "success".to_string()))));
+                ctx.link()
+                    .send_message(Msg::SetStatus(Some((theme_msg, "success".to_string()))));
                 let link = ctx.link().clone();
                 gloo_timers::callback::Timeout::new(3000, move || {
                     link.send_message(Msg::SetStatus(None));
-                }).forget();
+                })
+                .forget();
                 true
             }
 
@@ -166,11 +172,13 @@ impl App {
                     (StringKey::StatusOffline, "error")
                 };
                 let status_msg = lookup(msg_key, lang).to_string();
-                ctx.link().send_message(Msg::SetStatus(Some((status_msg, cls.to_string()))));
+                ctx.link()
+                    .send_message(Msg::SetStatus(Some((status_msg, cls.to_string()))));
                 let link = ctx.link().clone();
                 gloo_timers::callback::Timeout::new(3000, move || {
                     link.send_message(Msg::SetStatus(None));
-                }).forget();
+                })
+                .forget();
                 true
             }
             Msg::Print => {
@@ -183,11 +191,13 @@ impl App {
                         (StringKey::StatusPrintFailure, "error")
                     };
                     let status_msg = lookup(msg_key, lang).to_string();
-                    ctx.link().send_message(Msg::SetStatus(Some((status_msg, cls.to_string()))));
+                    ctx.link()
+                        .send_message(Msg::SetStatus(Some((status_msg, cls.to_string()))));
                     let link = ctx.link().clone();
                     gloo_timers::callback::Timeout::new(3000, move || {
                         link.send_message(Msg::SetStatus(None));
-                    }).forget();
+                    })
+                    .forget();
                 }
                 false
             }

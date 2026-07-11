@@ -22,8 +22,6 @@ impl App {
 
         let on_logout = ctx.link().callback(|_| Msg::Logout);
 
-
-
         html! {
             <ContextProvider<crate::i18n::LocaleContext> context={locale_context}>
                 <Header

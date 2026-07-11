@@ -85,11 +85,7 @@ async fn ws_handler(socket: WebSocket, state: AppState) {
                     let mut clients = state.clients.write().await;
                     let mut assigned = uid.to_string();
                     if clients.contains_key(&assigned) {
-                        assigned = format!(
-                            "{}-{}",
-                            uid,
-                            &uuid_v4_lite()
-                        );
+                        assigned = format!("{}-{}", uid, &uuid_v4_lite());
                     }
                     clients.insert(assigned.clone(), tx.clone());
                     assigned
