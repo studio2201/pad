@@ -1,7 +1,7 @@
 //! Backend security helpers.
 //!
 //! Provides utilities used by the companion apps' stub `sh` binaries to
-//! block interactive shell access inside read-only Nix containers.
+//! block interactive shell access inside read-only UBI containers.
 
 /// Clears the screen and prints a friendly "console access denied" message.
 ///
@@ -14,7 +14,7 @@ pub fn print_unauthorized_console_message() {
 
     println!(
         r#" _______________________________________
-/ I'm sorry, Dave. I'm afraid Nix won't \
+/ I'm sorry, Dave. I'm afraid the container won't \
 \ let me do that.                       /
  ---------------------------------------
         \   ^__^
@@ -25,7 +25,7 @@ pub fn print_unauthorized_console_message() {
     );
 
     println!("\x1B[1;31m\nSystem Alert: Console Access is UNAUTHORIZED.\x1B[0m");
-    println!("This application is running inside a secure, read-only Nix container.");
+    println!("This application is running inside a secure, read-only UBI container.");
     println!("Direct shell access is disabled for environment isolation and security.");
     println!("\nPress \x1B[1;37m[Enter]\x1B[0m to close connection...");
 }

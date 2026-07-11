@@ -2,7 +2,7 @@
 name = "shared-frontend"
 version = "3.0.13"
 edition = "2024"
-description = "Browser and frontend shared assets for UberMetroid companion apps."
+description = "Browser and frontend shared assets for etecoons companion apps."
 license = "Apache-2.0"
 repository = "https://github.com/etecoons/shared-assets"
 homepage = "https://github.com/etecoons/shared-assets"

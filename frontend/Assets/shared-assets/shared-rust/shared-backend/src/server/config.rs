@@ -7,7 +7,7 @@ use ipnet::IpNet;
 use std::env;
 use std::str::FromStr;
 
-/// Configuration shared by every UberMetroid companion app backend.
+/// Configuration shared by every etecoons companion app backend.
 ///
 /// Constructed via [`ServerConfig::from_env`], which reads common variables
 /// like `PORT`, `SITE_TITLE`, `ALLOWED_ORIGINS`, and PIN attempts/cookie

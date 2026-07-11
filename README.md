@@ -36,12 +36,12 @@ Images are **UBI9-minimal** based (Red Hat Universal Base Image). Tags:
 
 ```bash
 # Pull examples
-podman pull docker.io/ubermetroid/pad:latest
-podman pull docker.io/ubermetroid/pad:ubi
-podman pull docker.io/ubermetroid/pad:3.0.20
+podman pull docker.io/etecoons/pad:latest
+podman pull docker.io/etecoons/pad:ubi
+podman pull docker.io/etecoons/pad:3.0.20
 ```
 
-Hub: [https://hub.docker.com/r/ubermetroid/pad](https://hub.docker.com/r/ubermetroid/pad)
+Hub: [https://hub.docker.com/r/etecoons/pad](https://hub.docker.com/r/etecoons/pad)
 
 ### Docker Compose
 Create a `docker-compose.yml` file with the following service definition:
@@ -49,7 +49,7 @@ Create a `docker-compose.yml` file with the following service definition:
 ```yaml
 services:
   pad:
-    image: ubermetroid/pad:latest
+    image: etecoons/pad:latest
     container_name: pad
     restart: unless-stopped
     ports:
@@ -76,15 +76,15 @@ Requires [Podman](https://podman.io/) (or Docker) and network access to pull bas
 ```bash
 # From the repository root
 podman build --format docker -f Containerfile.ubi \
-  -t docker.io/ubermetroid/pad:3.0.20 \
-  -t docker.io/ubermetroid/pad:latest \
-  -t docker.io/ubermetroid/pad:ubi \
+  -t docker.io/etecoons/pad:3.0.20 \
+  -t docker.io/etecoons/pad:latest \
+  -t docker.io/etecoons/pad:ubi \
   .
 
 # Optional: push all three tags
-podman push docker.io/ubermetroid/pad:3.0.20
-podman push docker.io/ubermetroid/pad:latest
-podman push docker.io/ubermetroid/pad:ubi
+podman push docker.io/etecoons/pad:3.0.20
+podman push docker.io/etecoons/pad:latest
+podman push docker.io/etecoons/pad:ubi
 ```
 
 ---
@@ -135,4 +135,4 @@ cd backend && cargo run
 ---
 
 ## 📄 License
-Licensed under the [Apache License, Version 2.0](LICENSE). Copyright 2026 UberMetroid.
+Licensed under the [Apache License, Version 2.0](LICENSE). Copyright 2026 etecoons.

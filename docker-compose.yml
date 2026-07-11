@@ -1,6 +1,6 @@
 services:
   pad:
-    image: ubermetroid/pad:latest
+    image: etecoons/pad:latest
     container_name: pad
     restart: unless-stopped
     ports:

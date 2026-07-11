@@ -5,7 +5,7 @@
 # Build stage: rust official image (reliable wasm32 + trunk). Runtime is pure UBI.
 #
 # Build (Podman):
-#   cd ~/Projects/ubermetroid/pad
+#   cd ~/Projects/etecoons/pad
 #   podman build -f Containerfile.ubi -t pad-ubi:latest .
 #
 # Run:
@@ -18,7 +18,7 @@
 #
 
 # Compare size:
-#   podman images | grep -E 'pad-ubi|ubermetroid/pad'
+#   podman images | grep -E 'pad-ubi|etecoons/pad'
 # =============================================================================
 
 # ---------- build: compile backend + WASM frontend ----------

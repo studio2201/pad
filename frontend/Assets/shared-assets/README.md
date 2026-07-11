@@ -1,13 +1,13 @@
-# UberMetroid Shared Assets <img src="assets/icon.svg" width="48" height="48" alt="shared-assets logo" align="right">
+# etecoons Shared Assets <img src="assets/icon.svg" width="48" height="48" alt="shared-assets logo" align="right">
 
 **v3.0.1 — Shared styles, Rust components, and backend helpers for the
-UberMetroid companion applications (`beam`, `grid`, `pad`, `todo`, `trace`).**
+etecoons companion applications (`beam`, `grid`, `pad`, `todo`, `trace`).**
 
 ---
 
 ## Overview
 
-This repository collects everything that is reused across every UberMetroid
+This repository collects everything that is reused across every etecoons
 companion app: the shared CSS themes and layouts, the browser-side Yew UI
 chrome, and the server-side axum middleware, configuration parsing, and PIN
 authentication. Starting with v3.0.0 the Rust side is split into a 3-crate
@@ -331,4 +331,4 @@ The workspace is pinned via `rust-toolchain.toml` (Rust 1.96.0).
 ## License
 
 Licensed under the [Apache License, Version 2.0](LICENSE). Copyright 2026
-UberMetroid.
+etecoons.
