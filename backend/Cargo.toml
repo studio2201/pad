@@ -1,6 +1,6 @@
 [package]
 name = "backend"
-version = "3.0.27"
+version = "3.0.28"
 edition = "2024"
 authors = ["etecoons"]
 license = "Apache-2.0"
@@ -14,8 +14,8 @@ name = "backend"
 path = "src/main.rs"
 
 [dependencies]
-shared-core = { git = "https://github.com/etecoons/shared-assets.git", tag = "v3.0.28" }
-shared-backend = { git = "https://github.com/etecoons/shared-assets.git", tag = "v3.0.28" }
+shared-core = { git = "https://github.com/UberMetroid/shared-assets.git", tag = "v3.0.29" }
+shared-backend = { git = "https://github.com/UberMetroid/shared-assets.git", tag = "v3.0.29" }
 axum = { version = "0.8", features = ["ws", "macros"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
