@@ -41,8 +41,14 @@ jobs:
       - name: Cargo Test
         run: cargo test --workspace
 
+      - name: Install cargo-binstall
+        run: curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash
+
+      - name: Install cargo-deny
+        run: cargo binstall -y cargo-deny
+
       - name: Cargo Deny Check
-        uses: EmbarkStudios/cargo-deny-action@v1
+        run: cargo deny check
 
   build-and-push-container:
     name: build-and-push-container
