@@ -28,6 +28,8 @@ dotenvy = "0.15"
 cookie = "0.18"
 axum-extra = { version = "0.12", features = ["cookie"] }
 futures-util = "0.3"
+tungstenite = "0.21"
+http = "1"
 notify = "8.2"
 regex = "1.10"
 tracing = "0.1"
@@ -38,3 +40,10 @@ sha2 = "0.11"
 # is pulled in transitively by `shared-backend`, but declaring it here means a
 # future refactor of shared-backend won't silently break our use of it.
 constant_time_eq = "0.5"
+
+[dev-dependencies]
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls", "cookies"] }
+tokio-tungstenite = "0.21"
+http = "1"
+futures-util = "0.3"
+tungstenite = "0.21"
