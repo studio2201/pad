@@ -6,7 +6,7 @@ authors = ["studio2201"]
 license = "Apache-2.0"
 repository = "https://github.com/studio2201/pad"
 homepage = "https://github.com/studio2201/pad"
-description = "Axum backend service for pad."
+description = "Axum backend service for Pad."
 readme = "../README.md"
 
 [[bin]]
