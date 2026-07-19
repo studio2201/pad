@@ -126,7 +126,7 @@ dependencies = [
 
 [[package]]
 name = "backend"
-version = "3.0.36"
+version = "1.0.0"
 dependencies = [
  "axum",
  "axum-extra",
@@ -446,7 +446,7 @@ dependencies = [
 
 [[package]]
 name = "frontend"
-version = "3.0.36"
+version = "1.0.0"
 dependencies = [
  "futures-channel",
  "futures-util",
