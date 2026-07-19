@@ -108,21 +108,31 @@ RUN apk add --no-cache \
         ca-certificates \
         tini \
         wget \
- && mkdir -p /config /app/frontend/dist \
- && chown -R 99:100 /app /config
+ && mkdir -p /config
 
 COPY --from=builder /src/target/release/backend /app/backend
 COPY --from=builder /src/frontend/dist /app/frontend/dist
+
+# Runtime UID is 99 (nobody:nogroup). Some apps generate PWA manifests or
+# asset listings into /app/frontend/dist at boot (pad, trace, pulse). chown
+# /app (binary + frontend bundle) and /config (data dir) to 99:100, and
+# make the frontend bundle writable so the runtime generator can write
+# into /app/frontend/dist/assets/.
+RUN chown -R 99:100 /app /config \
+ && chmod -R u+w /app/frontend/dist
+
 # Rustle's source code references 'dist/' (without the 'frontend/'
 # prefix). Symlink so the path resolves either way.
-RUN ln -s /app/frontend/dist /app/dist
+RUN mkdir -p /app/data \
+ && rm -rf /app/data \
+ && ln -s /config /app/data \
+ && ln -sfn /app/frontend/dist /app/dist
 
 WORKDIR /app
 USER 99:100
 
 ENV PORT=4402 \
-    RUST_LOG=info \
-    PAD_DATA_DIR=/config
+    RUST_LOG=info
 
 
 EXPOSE 4402
