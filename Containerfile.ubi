@@ -5,7 +5,7 @@
 # Build stage: rust official image (reliable wasm32 + trunk). Runtime is pure UBI.
 #
 # Build (Podman):
-#   cd ~/Projects/etecoons/pad
+#   cd ~/Projects/studio2201/pad
 #   podman build -f Containerfile.ubi -t pad-ubi:latest .
 #
 # Run:
@@ -18,7 +18,7 @@
 #
 
 # Compare size:
-#   podman images | grep -E 'pad-ubi|etecoons/pad'
+#   podman images | grep -E 'pad-ubi|studio2201/pad'
 # =============================================================================
 
 # ---------- build: compile backend + WASM frontend ----------
@@ -65,7 +65,7 @@ FROM registry.access.redhat.com/ubi9/ubi-minimal:latest
 
 LABEL org.opencontainers.image.title="pad" \
       org.opencontainers.image.description="pad (UBI9 minimal pilot)" \
-      org.opencontainers.image.source="https://github.com/etecoons/pad" \
+      org.opencontainers.image.source="https://github.com/studio2201/pad" \
       org.opencontainers.image.base.name="registry.access.redhat.com/ubi9/ubi-minimal"
 
 # ca-certificates for HTTPS outbound; wget for HEALTHCHECK.
