@@ -250,3 +250,27 @@ fn test_property_origin_allowed_never_panics() {
         }
     }
 }
+
+#[test]
+fn test_is_path_within_data_dir_security_helper() {
+    use std::fs;
+
+    let base_dir = std::env::temp_dir().join("pad_test_sec_helper");
+    let _ = fs::create_dir_all(&base_dir);
+
+    let valid_file = base_dir.join("notepad1.txt");
+    fs::write(&valid_file, "content").unwrap();
+    assert!(routes::notepads_crud::is_path_within_data_dir(
+        &valid_file,
+        &base_dir
+    ));
+
+    let escape_path = base_dir.join("../outside.txt");
+    assert!(!routes::notepads_crud::is_path_within_data_dir(
+        &escape_path,
+        &base_dir
+    ));
+
+    let _ = fs::remove_file(&valid_file);
+    let _ = fs::remove_dir(&base_dir);
+}
