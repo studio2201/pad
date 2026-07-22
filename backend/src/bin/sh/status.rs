@@ -37,7 +37,9 @@ pub fn get_pin() -> Option<String> {
 
 pub fn get_allowed_origins() -> String {
     let key = format!("{}_ALLOWED_ORIGINS", crate::ENV_PREFIX);
-    env::var(&key).or_else(|_| env::var("ALLOWED_ORIGINS")).unwrap_or_else(|_| "*".to_string())
+    env::var(&key)
+        .or_else(|_| env::var("ALLOWED_ORIGINS"))
+        .unwrap_or_else(|_| "*".to_string())
 }
 
 pub fn get_db_file_path() -> Option<PathBuf> {
@@ -54,13 +56,21 @@ pub fn print_status() {
     println!("Data Directory: {:?}", get_data_dir());
     println!("PIN Enabled: {}", get_pin().is_some());
     println!("Allowed Origins: {}", get_allowed_origins());
-    println!("Timezone: {}", env::var("TZ").unwrap_or_else(|_| "UTC".to_string()));
+    println!(
+        "Timezone: {}",
+        env::var("TZ").unwrap_or_else(|_| "UTC".to_string())
+    );
 }
 
 pub fn print_env() {
     println!("=== {} Environment Variables ===", crate::APP_NAME);
     for (key, val) in env::vars() {
-        if key.starts_with(crate::ENV_PREFIX) || key == "PORT" || key == "DATA_DIR" || key == "TZ" || key == "ALLOWED_ORIGINS" {
+        if key.starts_with(crate::ENV_PREFIX)
+            || key == "PORT"
+            || key == "DATA_DIR"
+            || key == "TZ"
+            || key == "ALLOWED_ORIGINS"
+        {
             println!("{}={}", key, val);
         }
     }

@@ -1,9 +1,9 @@
 mod cli;
-mod tui;
-mod doctor;
 mod data;
+mod doctor;
 mod process;
 mod status;
+mod tui;
 
 use std::env;
 

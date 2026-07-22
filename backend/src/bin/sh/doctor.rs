@@ -1,6 +1,6 @@
+use crate::status::{get_data_dir, get_db_file_path, get_pin, get_port};
 use std::fs;
 use std::io::{self, Write};
-use crate::status::{get_port, get_data_dir, get_pin, get_db_file_path};
 
 pub fn run_doctor() {
     println!("=== {} Doctor Diagnostics ===", crate::APP_NAME);
@@ -67,6 +67,9 @@ pub fn run_doctor() {
     if failures == 0 {
         println!("\x1B[1;32mDoctor report: System is healthy and configured correctly.\x1B[0m");
     } else {
-        println!("\x1B[1;31mDoctor report: Found {} error(s). Please check logs or configurations.\x1B[0m", failures);
+        println!(
+            "\x1B[1;31mDoctor report: Found {} error(s). Please check logs or configurations.\x1B[0m",
+            failures
+        );
     }
 }

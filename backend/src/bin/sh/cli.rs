@@ -1,7 +1,7 @@
-use crate::status::{print_env, print_status};
+use crate::data::{clear_data, list_data_contents, print_data_stats};
 use crate::doctor::run_doctor;
-use crate::data::{print_data_stats, list_data_contents, clear_data};
-use crate::process::{run_start, run_end};
+use crate::process::{run_end, run_start};
+use crate::status::{print_env, print_status};
 
 pub fn print_help() {
     println!("Usage: sh [command]");
@@ -26,7 +26,11 @@ pub fn handle_cli_args(args: &[String]) {
     let cmd = args[1].to_lowercase();
     match cmd.as_str() {
         "version" | "--version" | "-v" => {
-            println!("{} version: v{}", crate::APP_NAME, env!("CARGO_PKG_VERSION"));
+            println!(
+                "{} version: v{}",
+                crate::APP_NAME,
+                env!("CARGO_PKG_VERSION")
+            );
         }
         "status" | "--status" | "info" => {
             print_status();

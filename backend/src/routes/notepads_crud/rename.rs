@@ -71,7 +71,9 @@ pub async fn rename_notepad(
             Err(e) => {
                 return (
                     axum::http::StatusCode::BAD_REQUEST,
-                    axum::Json(serde_json::json!({ "error": format!("Invalid notepad name: {}", e) })),
+                    axum::Json(
+                        serde_json::json!({ "error": format!("Invalid notepad name: {}", e) }),
+                    ),
                 )
                     .into_response();
             }
@@ -95,7 +97,8 @@ pub async fn rename_notepad(
                 let mut counter = 1;
                 let mut found_available = false;
                 while counter < 100 {
-                    let alt_name = match sanitize_filename(&format!("{}-{}", unique_name, counter)) {
+                    let alt_name = match sanitize_filename(&format!("{}-{}", unique_name, counter))
+                    {
                         Ok(s) => s,
                         Err(_) => break,
                     };
@@ -112,7 +115,9 @@ pub async fn rename_notepad(
                 if !found_available {
                     return (
                         axum::http::StatusCode::INTERNAL_SERVER_ERROR,
-                        axum::Json(serde_json::json!({ "error": "Unable to find available filename" })),
+                        axum::Json(
+                            serde_json::json!({ "error": "Unable to find available filename" }),
+                        ),
                     )
                         .into_response();
                 }

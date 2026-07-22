@@ -1,8 +1,8 @@
-use std::io::{self, Write, Read};
-use std::process::Command;
-use crate::status::{get_port, get_data_dir, get_pin, print_status, print_env};
+use crate::data::{clear_data, list_data_contents, print_data_stats};
 use crate::doctor::run_doctor;
-use crate::data::{print_data_stats, list_data_contents, clear_data};
+use crate::status::{get_data_dir, get_pin, get_port, print_env, print_status};
+use std::io::{self, Read, Write};
+use std::process::Command;
 
 pub struct RawMode;
 
@@ -44,33 +44,69 @@ pub fn run_tui() {
         let clr_disabled = "\x1B[33m";
         let clr_enabled = "\x1B[32m";
 
-        println!("{}╔══════════════════════════════════════════════════════════╗{}", clr_border, clr_reset);
+        println!(
+            "{}╔══════════════════════════════════════════════════════════╗{}",
+            clr_border, clr_reset
+        );
         let title = format!("{} Administration Console", crate::APP_NAME);
-        println!("{}║{}  {:^52}  {}║{}", clr_border, clr_title, title, clr_border, clr_reset);
-        println!("{}╠══════════════════════════════════════════════════════════╣{}", clr_border, clr_reset);
+        println!(
+            "{}║{}  {:^52}  {}║{}",
+            clr_border, clr_title, title, clr_border, clr_reset
+        );
+        println!(
+            "{}╠══════════════════════════════════════════════════════════╣{}",
+            clr_border, clr_reset
+        );
 
         let status_str = format!("{}● Running{}", clr_running, clr_reset);
-        println!("{}║{}  {}Status:{}          {:<38}{}║{}", clr_border, clr_reset, clr_label, clr_reset, status_str, clr_border, clr_reset);
-        println!("{}║{}  {}Web Port:{}        {:<28}{}║{}", clr_border, clr_reset, clr_label, clr_reset, get_port(), clr_border, clr_reset);
-        
+        println!(
+            "{}║{}  {}Status:{}          {:<38}{}║{}",
+            clr_border, clr_reset, clr_label, clr_reset, status_str, clr_border, clr_reset
+        );
+        println!(
+            "{}║{}  {}Web Port:{}        {:<28}{}║{}",
+            clr_border,
+            clr_reset,
+            clr_label,
+            clr_reset,
+            get_port(),
+            clr_border,
+            clr_reset
+        );
+
         let data_dir_str = format!("{:?}", get_data_dir());
         let data_dir_truncated = if data_dir_str.len() > 38 {
             format!("{}...", &data_dir_str[..35])
         } else {
             data_dir_str
         };
-        println!("{}║{}  {}Data Directory:{}  {:<38}{}║{}", clr_border, clr_reset, clr_label, clr_reset, data_dir_truncated, clr_border, clr_reset);
+        println!(
+            "{}║{}  {}Data Directory:{}  {:<38}{}║{}",
+            clr_border, clr_reset, clr_label, clr_reset, data_dir_truncated, clr_border, clr_reset
+        );
 
         let pin_str = if get_pin().is_some() {
             format!("{}🔒 Enabled (PIN Auth Active){}", clr_enabled, clr_reset)
         } else {
             format!("{}🔓 Disabled (No Auth Active){}", clr_disabled, clr_reset)
         };
-        println!("{}║{}  {}Security PIN:{}    {:<38}{}║{}", clr_border, clr_reset, clr_label, clr_reset, pin_str, clr_border, clr_reset);
+        println!(
+            "{}║{}  {}Security PIN:{}    {:<38}{}║{}",
+            clr_border, clr_reset, clr_label, clr_reset, pin_str, clr_border, clr_reset
+        );
 
-        println!("{}╠══════════════════════════════════════════════════════════╣{}", clr_border, clr_reset);
-        println!("{}║{}  Select an option:                                      {}║{}", clr_border, clr_reset, clr_border, clr_reset);
-        println!("{}║{}                                                        {}║{}", clr_border, clr_reset, clr_border, clr_reset);
+        println!(
+            "{}╠══════════════════════════════════════════════════════════╣{}",
+            clr_border, clr_reset
+        );
+        println!(
+            "{}║{}  Select an option:                                      {}║{}",
+            clr_border, clr_reset, clr_border, clr_reset
+        );
+        println!(
+            "{}║{}                                                        {}║{}",
+            clr_border, clr_reset, clr_border, clr_reset
+        );
 
         let options = [
             ("⚙ ", "Show Full Configuration Settings"),
@@ -78,7 +114,7 @@ pub fn run_tui() {
             ("📊", "View Database Statistics"),
             ("📂", "List Database/Files Content"),
             ("🗑 ", "Reset / Clear Application State"),
-            ("❌", "Exit Console")
+            ("❌", "Exit Console"),
         ];
 
         for (i, (icon, opt)) in options.iter().enumerate() {
@@ -86,19 +122,38 @@ pub fn run_tui() {
                 let opt_line = format!("  ➔  [ {} ]  {}", icon, opt);
                 let padding_spaces = 50 - (opt_line.chars().count() + 1);
                 let padded_opt_line = format!("{}{}", opt_line, " ".repeat(padding_spaces));
-                println!("{}║{}  \x1B[48;5;93m\x1B[37;1m{}\x1B[0m  {}║{}", clr_border, clr_reset, padded_opt_line, clr_border, clr_reset);
+                println!(
+                    "{}║{}  \x1B[48;5;93m\x1B[37;1m{}\x1B[0m  {}║{}",
+                    clr_border, clr_reset, padded_opt_line, clr_border, clr_reset
+                );
             } else {
                 let opt_line = format!("     [ {} ]  {}", icon, opt);
                 let padding_spaces = 50 - (opt_line.chars().count() + 1);
-                println!("{}║{}  {}{}  {}║{}", clr_border, clr_reset, opt_line, " ".repeat(padding_spaces), clr_border, clr_reset);
+                println!(
+                    "{}║{}  {}{}  {}║{}",
+                    clr_border,
+                    clr_reset,
+                    opt_line,
+                    " ".repeat(padding_spaces),
+                    clr_border,
+                    clr_reset
+                );
             }
         }
 
-        println!("{}║{}                                                        {}║{}", clr_border, clr_reset, clr_border, clr_reset);
-        println!("{}╚══════════════════════════════════════════════════════════╝{}", clr_border, clr_reset);
+        println!(
+            "{}║{}                                                        {}║{}",
+            clr_border, clr_reset, clr_border, clr_reset
+        );
+        println!(
+            "{}╚══════════════════════════════════════════════════════════╝{}",
+            clr_border, clr_reset
+        );
 
         println!();
-        println!("  ⌨  Use \x1B[1m[Up/Down Arrow]\x1B[0m to navigate • \x1B[1m[Enter]\x1B[0m to select • \x1B[1m[Q]\x1B[0m to quit");
+        println!(
+            "  ⌨  Use \x1B[1m[Up/Down Arrow]\x1B[0m to navigate • \x1B[1m[Enter]\x1B[0m to select • \x1B[1m[Q]\x1B[0m to quit"
+        );
         let _ = stdout.flush();
 
         let mut key_buf = [0u8; 3];
@@ -164,13 +219,22 @@ pub fn execute_tui_option(index: usize) {
         "SYSTEM DIAGNOSTICS REPORT (DOCTOR)",
         "DATABASE STATISTICS REPORT",
         "DATABASE FILE CONTENT LIST",
-        "RESET APPLICATION STATE"
+        "RESET APPLICATION STATE",
     ];
 
     if index < 5 {
-        println!("{}┌────────────────────────────────────────────────────────┐{}", clr_border, clr_reset);
-        println!("{}│{}  {:^52}  {}│{}", clr_border, clr_title, headers[index], clr_border, clr_reset);
-        println!("{}└────────────────────────────────────────────────────────┘{}", clr_border, clr_reset);
+        println!(
+            "{}┌────────────────────────────────────────────────────────┐{}",
+            clr_border, clr_reset
+        );
+        println!(
+            "{}│{}  {:^52}  {}│{}",
+            clr_border, clr_title, headers[index], clr_border, clr_reset
+        );
+        println!(
+            "{}└────────────────────────────────────────────────────────┘{}",
+            clr_border, clr_reset
+        );
         println!();
     }
 
