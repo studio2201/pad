@@ -9,18 +9,18 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/studio2201/pad/issues</Support>
   <Project>https://github.com/studio2201/pad</Project>
-  <Overview>Real-time collaborative scratchpad web application built in Rust with WebSocket Operational Transformation and atomic retro pinup interface.</Overview>
-  <Category>Tools: MediaServer:Other Network:Web Storage:</Category>
+  <Overview>Lightweight, secure self-hosted markdown notepad and document editor built in Rust.</Overview>
+  <Category>Tools: Productivity Network:Web</Category>
   <WebUI>http://[IP]:[PORT:4402]/</WebUI>
-  <TemplateURL/>
-  <Icon>https://raw.githubusercontent.com/studio2201/pad/master/assets/pad-icon.png</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/studio2201/unraid-templates/main/templates/pad.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/studio2201/unraid-templates/main/icons/pad.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <CPUset/>
   <DateInstalled/>
   <DonateText/>
   <DonateLink/>
-  <Description>Real-time collaborative scratchpad web application built in Rust with WebSocket Operational Transformation and atomic retro pinup interface.</Description>
+  <Description>Lightweight, secure self-hosted markdown notepad and document editor built in Rust.</Description>
   <Networking>
     <Mode>bridge</Mode>
     <Publish>
@@ -46,12 +46,11 @@
     </Variable>
     <Variable>
       <Value>/config</Value>
-      <Name>PAD_DATA_DIR</Name>
+      <Name>DATA_DIR</Name>
       <Mode/>
     </Variable>
   </Environment>
   <Labels/>
   <Config Name="Web UI Port" Target="4402" Default="4402" Mode="tcp" Description="HTTP Web Interface Port" Type="Port" Display="always" Required="true" Mask="false">4402</Config>
-  <Config Name="App Storage Directory" Target="/config" Default="/mnt/user/appdata/pad" Mode="rw" Description="Persistent notepads database directory" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/pad</Config>
-  <Config Name="Security PIN" Target="PAD_PIN" Default="" Mode="" Description="Optional PIN required for client access authentication" Type="Variable" Display="always" Required="false" Mask="true"/>
+  <Config Name="App Storage Directory" Target="/config" Default="/mnt/user/appdata/pad" Mode="rw" Description="Persistent data and configuration directory" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/pad</Config>
 </Container>
