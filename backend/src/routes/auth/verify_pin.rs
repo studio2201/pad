@@ -76,7 +76,16 @@ pub async fn verify_pin(
             .into_response();
     }
 
-    let expected_pin = pin_req.as_ref().unwrap();
+    let expected_pin = match pin_req.as_ref() {
+        Some(p) => p,
+        None => {
+            return (
+                axum::http::StatusCode::OK,
+                axum::Json(serde_json::json!({ "success": true })),
+            )
+                .into_response();
+        }
+    };
 
     let is_valid_fmt = payload.pin.len() >= 4 && payload.pin.len() <= 64;
 
@@ -118,7 +127,7 @@ pub async fn verify_pin(
                 .http_only(true)
                 .secure(secure)
                 .same_site(same_site)
-                .max_age(cookie_max_age.try_into().unwrap())
+                .max_age(cookie_max_age.try_into().unwrap_or_default())
                 .build(),
         );
 

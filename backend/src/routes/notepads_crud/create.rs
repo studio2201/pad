@@ -61,10 +61,18 @@ pub async fn create_notepad(jar: CookieJar, State(state): State<AppState>) -> im
         };
         data.notepads.push(new_notepad.clone());
 
-        if fs::write(&state.notepads_file, serde_json::to_string(&data).unwrap())
-            .await
-            .is_err()
-        {
+        let json_data = match serde_json::to_string(&data) {
+            Ok(s) => s,
+            Err(_) => {
+                return (
+                    axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                    axum::Json(serde_json::json!({ "error": "Error serializing notepads list" })),
+                )
+                    .into_response();
+            }
+        };
+
+        if fs::write(&state.notepads_file, &json_data).await.is_err() {
             return (
                 axum::http::StatusCode::INTERNAL_SERVER_ERROR,
                 axum::Json(serde_json::json!({ "error": "Error updating notepads list" })),
@@ -112,7 +120,11 @@ pub async fn create_notepad(jar: CookieJar, State(state): State<AppState>) -> im
             .http_only(true)
             .secure(secure)
             .same_site(SameSite::Strict)
-            .max_age(Duration::from_secs(history_age_secs).try_into().unwrap())
+            .max_age(
+                Duration::from_secs(history_age_secs)
+                    .try_into()
+                    .unwrap_or_default(),
+            )
             .build(),
     );
 

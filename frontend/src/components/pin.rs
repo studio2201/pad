@@ -18,7 +18,7 @@ pub fn login(props: &LoginProps) -> Html {
     let is_locked = use_state(|| false);
     let pin_length = use_state(|| 4);
     let input_ref = use_node_ref();
-    let locale = use_context::<crate::i18n::LocaleContext>().unwrap();
+    let locale = use_context::<crate::i18n::LocaleContext>().unwrap_or_default();
 
     {
         let input_ref = input_ref.clone();

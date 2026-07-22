@@ -135,10 +135,18 @@ pub async fn rename_notepad(
 
         data.notepads[idx].name = unique_name.clone();
 
-        if fs::write(&state.notepads_file, serde_json::to_string(&data).unwrap())
-            .await
-            .is_err()
-        {
+        let json_data = match serde_json::to_string(&data) {
+            Ok(s) => s,
+            Err(_) => {
+                return (
+                    axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                    axum::Json(serde_json::json!({ "error": "Error serializing notepads list" })),
+                )
+                    .into_response();
+            }
+        };
+
+        if fs::write(&state.notepads_file, &json_data).await.is_err() {
             return (
                 axum::http::StatusCode::INTERNAL_SERVER_ERROR,
                 axum::Json(serde_json::json!({ "error": "Error updating notepads list" })),

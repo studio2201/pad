@@ -39,7 +39,11 @@ pub async fn get_notes(
             .http_only(true)
             .secure(secure)
             .same_site(SameSite::Strict)
-            .max_age(Duration::from_secs(history_age_secs).try_into().unwrap())
+            .max_age(
+                Duration::from_secs(history_age_secs)
+                    .try_into()
+                    .unwrap_or_default(),
+            )
             .build(),
     );
 
@@ -131,13 +135,18 @@ pub async fn delete_notepad(
 
         let deleted_notepad = data.notepads.remove(idx);
 
-        if fs::write(
-            &state.notepads_file,
-            serde_json::to_string_pretty(&data).unwrap(),
-        )
-        .await
-        .is_err()
-        {
+        let json_str = match serde_json::to_string_pretty(&data) {
+            Ok(s) => s,
+            Err(_) => {
+                return (
+                    axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                    axum::Json(serde_json::json!({ "error": "Error serializing notepads list" })),
+                )
+                    .into_response();
+            }
+        };
+
+        if fs::write(&state.notepads_file, &json_str).await.is_err() {
             return (
                 axum::http::StatusCode::INTERNAL_SERVER_ERROR,
                 axum::Json(serde_json::json!({ "error": "Error saving notepads list" })),

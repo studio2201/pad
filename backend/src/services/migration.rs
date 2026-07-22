@@ -37,7 +37,10 @@ const WINDOWS_RESERVED: &[&str] = &[
 /// 6. Reject Windows-reserved device names (CON, PRN, etc.) case-insensitively.
 /// 7. Cap the final length at [`MAX_FILENAME_LEN`].
 pub fn sanitize_filename(name: &str) -> Result<String, String> {
-    let re = regex::Regex::new(r#"[<>:"/\\|?*\x00-\x1f]"#).unwrap();
+    let re = match regex::Regex::new(r#"[<>:"/\\|?*\x00-\x1f]"#) {
+        Ok(r) => r,
+        Err(_) => return Err("invalid regex pattern".to_string()),
+    };
     let replaced = re.replace_all(name, "_");
     let sanitized = replaced.trim().to_string();
 

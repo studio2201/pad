@@ -39,7 +39,7 @@ pub async fn serve_root(
         state
             .data_dir
             .parent()
-            .unwrap()
+            .unwrap_or(&state.data_dir)
             .join("frontend/dist/index.html"),
     )
     .await
@@ -76,7 +76,7 @@ pub async fn serve_login(
         state
             .data_dir
             .parent()
-            .unwrap()
+            .unwrap_or(&state.data_dir)
             .join("frontend/dist/index.html"),
     )
     .await

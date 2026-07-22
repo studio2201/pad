@@ -28,7 +28,7 @@ use state::{AppState, AppStateInner};
 use ws::handle_socket;
 
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Initialize logging
     init_tracing(default_log_dir().as_deref());
 
@@ -180,9 +180,7 @@ async fn main() {
         .layer(cors)
         .with_state(state.clone());
 
-    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))
-        .await
-        .unwrap();
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await?;
     println!("Server is running on port {}", port);
     println!("Base URL: {}", state.config.server.base_url);
     println!("Environment: {}", state.config.node_env);
@@ -195,6 +193,6 @@ async fn main() {
         listener,
         app.into_make_service_with_connect_info::<SocketAddr>(),
     )
-    .await
-    .unwrap();
+    .await?;
+    Ok(())
 }

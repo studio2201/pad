@@ -52,13 +52,18 @@ pub fn use_collab_websocket(
                 if *cancelled.borrow() {
                     break;
                 }
-                let window = web_sys::window().unwrap();
-                let protocol = if window.location().protocol().unwrap() == "https:" {
-                    "wss:"
-                } else {
-                    "ws:"
+                let window = match web_sys::window() {
+                    Some(w) => w,
+                    None => break,
                 };
-                let host = window.location().host().unwrap();
+                let protocol = match window.location().protocol() {
+                    Ok(p) if p == "https:" => "wss:",
+                    _ => "ws:",
+                };
+                let host = match window.location().host() {
+                    Ok(h) => h,
+                    Err(_) => break,
+                };
                 let ws_url = format!("{}//{}/ws", protocol, host);
 
                 if let Ok(ws) = WebSocket::open(&ws_url) {

@@ -62,14 +62,20 @@ pub async fn search_api(
 
 // Service worker serving
 pub async fn serve_service_worker(State(state): State<AppState>) -> impl IntoResponse {
-    let sw_path = state
-        .data_dir
-        .parent()
-        .unwrap()
-        .join("frontend/dist/service-worker.js");
+    let parent_dir = state.data_dir.parent().unwrap_or(&state.data_dir);
+    let sw_path = parent_dir.join("frontend/dist/service-worker.js");
     match fs::read_to_string(&sw_path).await {
         Ok(content) => {
-            let re = regex::Regex::new(r#"let APP_VERSION = ".*?";"#).unwrap();
+            let re = match regex::Regex::new(r#"let APP_VERSION = ".*?";"#) {
+                Ok(r) => r,
+                Err(_) => {
+                    return (
+                        axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+                        "Regex compilation error".to_string(),
+                    )
+                        .into_response();
+                }
+            };
             let replacement = format!(r#"let APP_VERSION = "{}";"#, state.config.version);
             let updated = re.replace(&content, replacement.as_str()).to_string();
 

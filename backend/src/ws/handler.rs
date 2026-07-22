@@ -193,8 +193,9 @@ async fn ws_handler(socket: WebSocket, state: AppState) {
                         let _ = client_tx.send(msg.clone());
                     }
                 }
-            } else if msg_type == Some("sync_request") && notepad_id.is_some() {
-                let nid = notepad_id.unwrap();
+            } else if msg_type == Some("sync_request")
+                && let Some(nid) = notepad_id
+            {
                 let history_map = state.operations_history.read().await;
                 let history = history_map.get(nid).cloned().unwrap_or_default();
 

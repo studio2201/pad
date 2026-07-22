@@ -28,7 +28,7 @@ pub fn editor(props: &EditorProps) -> Html {
     let debounce_timer = use_mut_ref(|| None::<Timeout>);
     let editor_ref = use_node_ref();
     let save_status = use_state(|| "saved".to_string());
-    let locale = use_context::<crate::i18n::LocaleContext>().unwrap();
+    let locale = use_context::<crate::i18n::LocaleContext>().unwrap_or_default();
 
     {
         let on_content_empty = props.on_content_empty.clone();

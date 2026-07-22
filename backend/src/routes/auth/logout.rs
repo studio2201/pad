@@ -14,7 +14,7 @@ pub async fn logout(jar: CookieJar, State(state): State<AppState>) -> impl IntoR
             .path("/")
             .http_only(true)
             .same_site(SameSite::Strict)
-            .max_age(Duration::from_secs(0).try_into().unwrap())
+            .max_age(Duration::from_secs(0).try_into().unwrap_or_default())
             .build(),
     );
     (jar, axum::Json(serde_json::json!({ "success": true }))).into_response()
