@@ -111,3 +111,59 @@ fn test_sanitize_filename_rules() {
     assert!(sanitize_filename("   ").is_err());
     assert!(sanitize_filename("///").is_err());
 }
+
+#[test]
+fn test_property_sanitize_filename_never_panics() {
+    use crate::migration::sanitize_filename;
+
+    let long_str = "a".repeat(1000);
+    let malformed_inputs = vec![
+        "\0",
+        "\x00\x01\x02",
+        "../../../../etc/passwd",
+        "C:\\Windows\\System32\\cmd.exe",
+        "CON.txt",
+        "AUX",
+        "PRN.tar.gz",
+        "COM1",
+        "   ..   ",
+        "🔥🦀🎉",
+        long_str.as_str(),
+        "../../..//..//",
+        "hello\0world",
+    ];
+
+    for input in malformed_inputs {
+        let res = sanitize_filename(input);
+        if let Ok(clean) = res {
+            assert!(!clean.contains('/'));
+            assert!(!clean.contains('\\'));
+            assert!(!clean.contains('\0'));
+            assert!(!clean.starts_with('.'));
+        }
+    }
+}
+
+#[test]
+fn test_property_origin_allowed_never_panics() {
+    let origins = vec![
+        None,
+        Some(""),
+        Some("http://localhost"),
+        Some("https://pad.example.com"),
+        Some("javascript:alert(1)"),
+        Some("data:text/html,test"),
+        Some("\0"),
+    ];
+
+    let bases = vec!["", "http://localhost:4402", "https://pad.example.com", "*"];
+    let envs = vec!["production", "development", "staging", ""];
+
+    for origin in &origins {
+        for base in &bases {
+            for env in &envs {
+                let _ = ws::is_origin_allowed(*origin, base, env);
+            }
+        }
+    }
+}
