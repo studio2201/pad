@@ -1,6 +1,6 @@
+use crate::status::{get_data_dir, get_db_file_path};
 use std::fs;
 use std::io::{self, Write};
-use crate::status::{get_data_dir, get_db_file_path};
 
 pub fn print_data_stats() {
     println!("=== {} Data Statistics ===", crate::APP_NAME);
@@ -14,11 +14,11 @@ pub fn print_data_stats() {
             let mut count = 0;
             let mut total_size = 0;
             for entry in entries.flatten() {
-                if let Ok(meta) = entry.metadata() {
-                    if meta.is_file() {
-                        count += 1;
-                        total_size += meta.len();
-                    }
+                if let Ok(meta) = entry.metadata()
+                    && meta.is_file()
+                {
+                    count += 1;
+                    total_size += meta.len();
                 }
             }
             println!("Uploaded Files: {}", count);
@@ -31,13 +31,19 @@ pub fn print_data_stats() {
             if let Ok(meta) = fs::metadata(&path) {
                 println!("Database File: {:?}", path);
                 println!("File Size: {} bytes", meta.len());
-                if let Ok(content) = fs::read_to_string(&path) {
-                    if let Ok(value) = serde_json::from_str::<serde_json::Value>(&content) {
-                        if value.is_object() {
-                            println!("Number of database keys: {}", value.as_object().unwrap().keys().len());
-                        } else if value.is_array() {
-                            println!("Number of database entries: {}", value.as_array().unwrap().len());
-                        }
+                if let Ok(content) = fs::read_to_string(&path)
+                    && let Ok(value) = serde_json::from_str::<serde_json::Value>(&content)
+                {
+                    if value.is_object() {
+                        println!(
+                            "Number of database keys: {}",
+                            value.as_object().unwrap().keys().len()
+                        );
+                    } else if value.is_array() {
+                        println!(
+                            "Number of database entries: {}",
+                            value.as_array().unwrap().len()
+                        );
                     }
                 }
             }
@@ -57,10 +63,10 @@ pub fn list_data_contents() {
         if let Ok(entries) = fs::read_dir(&uploads_dir) {
             for entry in entries.flatten() {
                 let name = entry.file_name().to_string_lossy().to_string();
-                if let Ok(meta) = entry.metadata() {
-                    if meta.is_file() {
-                        println!(" - {} ({} bytes)", name, meta.len());
-                    }
+                if let Ok(meta) = entry.metadata()
+                    && meta.is_file()
+                {
+                    println!(" - {} ({} bytes)", name, meta.len());
                 }
             }
         } else {
@@ -92,7 +98,10 @@ pub fn list_data_contents() {
 
     match crate::APP_NAME {
         "Todo" => {
-            if let Ok(lists) = serde_json::from_str::<std::collections::HashMap<String, serde_json::Value>>(&content) {
+            if let Ok(lists) = serde_json::from_str::<
+                std::collections::HashMap<String, serde_json::Value>,
+            >(&content)
+            {
                 for (list_name, items) in lists {
                     println!("List: {}", list_name);
                     if let Some(arr) = items.as_array() {
@@ -127,7 +136,10 @@ pub fn list_data_contents() {
             }
         }
         "Pad" => {
-            if let Ok(pads) = serde_json::from_str::<std::collections::HashMap<String, serde_json::Value>>(&content) {
+            if let Ok(pads) = serde_json::from_str::<
+                std::collections::HashMap<String, serde_json::Value>,
+            >(&content)
+            {
                 for (pad_id, pad) in pads {
                     let text = pad["content"].as_str().unwrap_or("");
                     println!("Pad ID: {} ({} chars)", pad_id, text.len());
@@ -162,7 +174,10 @@ pub fn clear_data() {
         let trimmed = input.trim().to_lowercase();
         if trimmed == "y" || trimmed == "yes" {
             if crate::APP_NAME == "Beam" {
-                let uploads_dir = get_data_dir().parent().unwrap_or(&get_data_dir()).join("uploads");
+                let uploads_dir = get_data_dir()
+                    .parent()
+                    .unwrap_or(&get_data_dir())
+                    .join("uploads");
                 let _ = fs::remove_dir_all(&uploads_dir);
                 let _ = fs::create_dir_all(&uploads_dir);
                 println!("Uploads directory cleared.");
