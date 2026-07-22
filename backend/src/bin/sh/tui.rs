@@ -48,20 +48,28 @@ pub fn run_tui() {
             "{}╔══════════════════════════════════════════════════════════╗{}",
             clr_border, clr_reset
         );
-        let title = format!("{} Administration Console", crate::APP_NAME);
         println!(
             "{}║{}  {:^52}  {}║{}",
-            clr_border, clr_title, title, clr_border, clr_reset
+            clr_border,
+            clr_title,
+            format!("{} Administration Console", crate::APP_NAME),
+            clr_border,
+            clr_reset
         );
         println!(
             "{}╠══════════════════════════════════════════════════════════╣{}",
             clr_border, clr_reset
         );
 
-        let status_str = format!("{}● Running{}", clr_running, clr_reset);
         println!(
             "{}║{}  {}Status:{}          {:<38}{}║{}",
-            clr_border, clr_reset, clr_label, clr_reset, status_str, clr_border, clr_reset
+            clr_border,
+            clr_reset,
+            clr_label,
+            clr_reset,
+            format!("{}● Running{}", clr_running, clr_reset),
+            clr_border,
+            clr_reset
         );
         println!(
             "{}║{}  {}Web Port:{}        {:<28}{}║{}",
@@ -118,25 +126,25 @@ pub fn run_tui() {
         ];
 
         for (i, (icon, opt)) in options.iter().enumerate() {
-            if i == menu_selection {
-                let opt_line = format!("  ➔  [ {} ]  {}", icon, opt);
-                let padding_spaces = 50 - (opt_line.chars().count() + 1);
-                let padded_opt_line = format!("{}{}", opt_line, " ".repeat(padding_spaces));
+            let (opt_line, is_sel) = if i == menu_selection {
+                (format!("  ➔  [ {} ]  {}", icon, opt), true)
+            } else {
+                (format!("     [ {} ]  {}", icon, opt), false)
+            };
+            let padded = format!(
+                "{}{}",
+                opt_line,
+                " ".repeat(50 - (opt_line.chars().count() + 1))
+            );
+            if is_sel {
                 println!(
                     "{}║{}  \x1B[48;5;93m\x1B[37;1m{}\x1B[0m  {}║{}",
-                    clr_border, clr_reset, padded_opt_line, clr_border, clr_reset
+                    clr_border, clr_reset, padded, clr_border, clr_reset
                 );
             } else {
-                let opt_line = format!("     [ {} ]  {}", icon, opt);
-                let padding_spaces = 50 - (opt_line.chars().count() + 1);
                 println!(
-                    "{}║{}  {}{}  {}║{}",
-                    clr_border,
-                    clr_reset,
-                    opt_line,
-                    " ".repeat(padding_spaces),
-                    clr_border,
-                    clr_reset
+                    "{}║{}  {}  {}║{}",
+                    clr_border, clr_reset, padded, clr_border, clr_reset
                 );
             }
         }

@@ -203,25 +203,15 @@ pub fn use_collab_websocket(
     });
 
     let on_local_change = {
-        let ws_sender = ws_sender.clone();
-        let offline_queue = offline_queue.clone();
-        let uid = uid.clone();
-        let nid = nid.clone();
+        let (ws_sender, offline_queue, uid, nid) = (
+            ws_sender.clone(),
+            offline_queue.clone(),
+            uid.clone(),
+            nid.clone(),
+        );
         Callback::from(move |(old, new): (String, String)| {
             for op in diff_strings(&old, &new) {
-                let msg = json!({
-                    "type": "operation",
-                    "operation": {
-                        "id": js_sys::Date::now() as i64,
-                        "type": op.op_type,
-                        "position": op.position,
-                        "text": op.text,
-                        "userId": uid
-                    },
-                    "notepadId": nid,
-                    "userId": uid
-                })
-                .to_string();
+                let msg = json!({"type": "operation", "operation": {"id": js_sys::Date::now() as i64, "type": op.op_type, "position": op.position, "text": op.text, "userId": uid}, "notepadId": nid, "userId": uid}).to_string();
                 if let Some(ref tx) = *ws_sender.borrow() {
                     let _ = tx.unbounded_send(msg);
                 } else {
@@ -235,14 +225,7 @@ pub fn use_collab_websocket(
         let ws_sender = ws_sender.clone();
         Callback::from(move |position: usize| {
             if let Some(ref tx) = *ws_sender.borrow() {
-                let msg = json!({
-                    "type": "cursor",
-                    "userId": uid,
-                    "color": color,
-                    "position": position,
-                    "notepadId": nid
-                })
-                .to_string();
+                let msg = json!({"type": "cursor", "userId": uid, "color": color, "position": position, "notepadId": nid}).to_string();
                 let _ = tx.unbounded_send(msg);
             }
         })
