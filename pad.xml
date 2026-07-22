@@ -10,7 +10,7 @@
   <Support>https://github.com/studio2201/pad/issues</Support>
   <Project>https://github.com/studio2201/pad</Project>
   <Overview>Lightweight, secure self-hosted markdown notepad and document editor built in Rust.</Overview>
-  <Category>Tools: Productivity Network:Web</Category>
+  <Category>Productivity:Office Network:Web</Category>
   <WebUI>http://[IP]:[PORT:4402]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/studio2201/unraid-templates/main/templates/pad.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/studio2201/unraid-templates/main/icons/pad.png</Icon>
