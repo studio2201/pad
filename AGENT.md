@@ -1,23 +1,23 @@
-# AGENT.md — Standing Coding Rules & Agent Protocols for Pad
+# AGENT.md — Standing Coding Rules & Governance Protocols
 
-This repository operates under strict multi-agent governance and first-principles software development protocols.
+This repository operates under strict multi-agent governance and first-principles Rust development protocols.
 
 ---
 
-## Multi-Agent Triad Governance
+## Multi-Agent Triad Definition
 
 1. **Strategic Arbiter**:
-   - Monitors overall system architecture, Axum/Yew web framework design, and WebSocket RFC compliance.
+   - Monitors overall system architecture, web/binary framework alignment, and protocol RFC compliance.
    - Resolves trade-offs by strictly prioritizing **Security over Performance**.
-   - Enforces the hard **$\le 250$ line limit per `.rs` file** and logical function boundary splitting.
+   - Enforces the hard **<= 250 line limit per .rs file** and logical function boundary splitting.
 
 2. **Security Agent**:
-   - Hunts memory safety hazards, input sanitization gaps, path traversal bugs, WebSocket frame injection, and state synchronization races.
-   - Operates under the **Zero-Complaint Rule**: must provide full replacement code for any identified vulnerability or output `PASS: SECURITY AUDIT CLEAN`.
+   - Hunts memory safety hazards, input sanitization gaps, path traversal bugs, and buffer boundaries.
+   - Operates under the **Zero-Complaint Rule**: must provide full replacement code for any identified vulnerability or output .
 
 3. **Performance & Devil's Advocate Agent**:
-   - Enforces zero-cost abstractions, minimal heap allocations, lock-free async structures, and high-throughput WebSocket broadcast pipelines.
-   - Operates under the **Zero-Complaint Rule**: must provide full replacement code for any identified bottleneck or output `PASS: PERFORMANCE AUDIT CLEAN`.
+   - Enforces zero-cost abstractions, minimal heap allocations, and lock-free async concurrency.
+   - Operates under the **Zero-Complaint Rule**: must provide full replacement code for any identified bottleneck or output .
 
 ---
 
@@ -28,18 +28,18 @@ This repository operates under strict multi-agent governance and first-principle
    - All code is licensed under **Apache 2.0** for explicit patent and trademark protection.
 
 2. **RFC & Protocol Compliance**:
-   - Enforce strict RFC compliance across HTTP/1.1, HTTP/2, WebSocket (RFC 6455), and JSON-RPC wire protocols.
+   - Enforce strict RFC compliance across all wire, networking, storage, and indexer protocols.
 
 3. **File Line Cap & Domain Naming**:
-   - **Hard 250-line limit per `.rs` file**. Split files exclusively at logical function boundaries.
-   - Use explicit, domain-specific module and file names (e.g., `ws/handler.rs`, `services/migration.rs`).
+   - **Hard 250-line limit per .rs file**. Split files exclusively at logical function boundaries.
+   - Use explicit, domain-specific module and file names.
 
 4. **Structured Logging & Observability**:
-   - Instrument all critical paths, state transitions, warnings, and error boundaries with structured `tracing` macros (`#[tracing::instrument]`, `info!`, `warn!`, `error!`).
+   - Instrument all critical paths, state transitions, warnings, and error boundaries with structured  macros (, , , ).
 
-5. **Test Ladder & Quality Gates**:
-   - Concurrently write unit and integration tests alongside code features.
-   - All code must pass `cargo test --workspace`, `cargo clippy --workspace -- -D warnings`, and `cargo fmt --check`.
+5. **Strict 3:1 Test-to-Code Ratio**:
+   - Enforce a strict **3:1 ratio of testing logic to application code**.
+   - Explicitly cover internal helper functions, public interfaces, and user interfaces concurrently as code is built.
 
 6. **Zero Dead Code**:
-   - Actively remove unused imports, dead functions, and vestigial structs. Maintain clean developer experience.
+   - Actively remove unused imports, dead functions, and vestigial structs. Maintain a clean developer experience.
