@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img src="assets/icon.png" width="48" height="48" valign="middle"> Pad
+  <img src="assets/icon.png?v=1.0.31" width="48" height="48" valign="middle"> Pad
 </h1>
 
 <p align="center">
