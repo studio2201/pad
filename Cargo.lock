@@ -2048,8 +2048,8 @@ dependencies = [
 
 [[package]]
 name = "shared-backend"
-version = "3.0.36"
-source = "git+https://github.com/studio2201/shared-assets.git?tag=v3.0.36#5af127c009331250a3cebf0f6970ee0dab0289a6"
+version = "3.0.39"
+source = "git+https://github.com/studio2201/shared-assets.git?tag=v3.0.39#d9d716ba42b270f2dc3519357f915956d8ff79be"
 dependencies = [
  "anyhow",
  "axum",
@@ -2074,8 +2074,8 @@ dependencies = [
 
 [[package]]
 name = "shared-core"
-version = "3.0.36"
-source = "git+https://github.com/studio2201/shared-assets.git?tag=v3.0.36#5af127c009331250a3cebf0f6970ee0dab0289a6"
+version = "3.0.39"
+source = "git+https://github.com/studio2201/shared-assets.git?tag=v3.0.39#d9d716ba42b270f2dc3519357f915956d8ff79be"
 dependencies = [
  "constant_time_eq 0.3.1",
  "serde",
@@ -2083,8 +2083,8 @@ dependencies = [
 
 [[package]]
 name = "shared-frontend"
-version = "3.0.36"
-source = "git+https://github.com/studio2201/shared-assets.git?tag=v3.0.36#5af127c009331250a3cebf0f6970ee0dab0289a6"
+version = "3.0.39"
+source = "git+https://github.com/studio2201/shared-assets.git?tag=v3.0.39#d9d716ba42b270f2dc3519357f915956d8ff79be"
 dependencies = [
  "js-sys",
  "serde",
