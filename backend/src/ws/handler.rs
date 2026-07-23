@@ -33,7 +33,7 @@ pub async fn handle_socket(
 
     let allowed = is_origin_allowed(
         origin,
-        &state.config.server.base_url,
+        &state.config.base_url,
         &state.config.node_env,
     );
 
@@ -42,7 +42,7 @@ pub async fn handle_socket(
             target: "ws",
             "Blocked WebSocket upgrade from origin {:?} (base_url={}, env={})",
             origin,
-            state.config.server.base_url,
+            state.config.base_url,
             state.config.node_env,
         );
         return (StatusCode::FORBIDDEN, "Forbidden").into_response();

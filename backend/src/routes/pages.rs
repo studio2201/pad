@@ -45,7 +45,7 @@ pub async fn serve_root(
     .await
     {
         Ok(html) => {
-            let rendered = html.replace("{{SITE_TITLE}}", &state.config.server.site_title);
+            let rendered = html.replace("{{SITE_TITLE}}", &state.config.site_title);
             ([(axum::http::header::CONTENT_TYPE, "text/html")], rendered).into_response()
         }
         Err(e) => (
@@ -82,7 +82,7 @@ pub async fn serve_login(
     .await
     {
         Ok(html) => {
-            let rendered = html.replace("{{SITE_TITLE}}", &state.config.server.site_title);
+            let rendered = html.replace("{{SITE_TITLE}}", &state.config.site_title);
             ([(axum::http::header::CONTENT_TYPE, "text/html")], rendered).into_response()
         }
         Err(e) => (

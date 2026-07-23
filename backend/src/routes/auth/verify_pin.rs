@@ -5,7 +5,7 @@ use axum::{
 };
 use axum_extra::extract::cookie::CookieJar;
 use shared_backend::auth::attempts;
-use shared_backend::server::get_client_ip;
+use crate::ip::get_client_ip;
 use std::net::SocketAddr;
 use std::time::Duration;
 
@@ -24,7 +24,7 @@ pub async fn verify_pin(
     State(state): State<AppState>,
     axum::Json(payload): axum::Json<VerifyPinPayload>,
 ) -> impl IntoResponse {
-    let pin_req = &state.config.server.pin;
+    let pin_req = &state.config.pin;
     if pin_req.is_none() {
         return (
             axum::http::StatusCode::OK,
@@ -36,11 +36,11 @@ pub async fn verify_pin(
     let ip_str = get_client_ip(
         &headers,
         addr,
-        state.config.server.trust_proxy,
-        &state.config.server.trusted_proxies,
+        state.config.trust_proxy,
+        &state.config.trusted_proxies,
     );
-    let max_attempts = state.config.server.max_attempts;
-    let lockout_dur = Duration::from_secs(state.config.server.lockout_time_minutes * 60);
+    let max_attempts = state.config.max_attempts;
+    let lockout_dur = Duration::from_secs(state.config.lockout_time_minutes * 60);
 
     if attempts::is_locked_out(&ip_str, max_attempts, lockout_dur) {
         let remaining = attempts::lockout_remaining_secs(&ip_str, lockout_dur);
@@ -92,11 +92,11 @@ pub async fn verify_pin(
 
         let secure = crate::cookie_auth::cookie_should_be_secure(
             &headers,
-            &state.config.server.base_url,
+            &state.config.base_url,
         );
 
         let cookie = crate::cookie_auth::build_cookie(&session_id,
-            state.config.server.cookie_max_age_hours,
+            state.config.cookie_max_age_hours,
             secure,
         );
         let jar = jar.add(cookie);

@@ -12,6 +12,7 @@ use std::time::Duration;
 use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 
+mod ip;
 mod config;
 mod cookie_auth;
 mod routes;
@@ -42,7 +43,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .unwrap_or(4402);
 
     let config = AppConfig::load_from_env(port);
-    let site_title = config.server.site_title.clone();
+    let site_title = config.site_title.clone();
 
     let root_path = PathBuf::from(".");
     let data_dir = std::env::var("PAD_DATA_DIR")
@@ -137,7 +138,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // so the same production-tested configuration applies across every
     // companion app. The `Arc<ServerConfig>` is shared between layers to keep
     // the dependency tree small.
-    let server_config = Arc::new(state.config.server.clone());
+    let server_config = Arc::new(state.config.clone());
     let cors = cors_layer(&server_config);
 
     // Setup routes
@@ -184,7 +185,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await?;
     println!("Server is running on port {}", port);
-    println!("Base URL: {}", state.config.server.base_url);
+    println!("Base URL: {}", state.config.base_url);
     println!("Environment: {}", state.config.node_env);
     println!("Version: {}", state.config.version);
 

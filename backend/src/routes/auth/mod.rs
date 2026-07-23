@@ -15,14 +15,14 @@ use axum::{
 use axum_extra::extract::cookie::CookieJar;
 
 use constant_time_eq::constant_time_eq;
-use shared_backend::server::get_client_ip;
+use crate::ip::get_client_ip;
 use std::net::SocketAddr;
 
 pub const COOKIE_NAME: &str = "PAD_PIN";
 
 // Authenticated helper
 pub async fn is_authenticated(jar: &CookieJar, state: &AppState, headers: &HeaderMap) -> bool {
-    let pin = match &state.config.server.pin {
+    let pin = match &state.config.pin {
         Some(p) => p,
         None => return true,
     };
@@ -66,8 +66,8 @@ pub async fn rate_limit_middleware(
     let ip = get_client_ip(
         req.headers(),
         addr.unwrap_or_else(|| SocketAddr::from(([127, 0, 0, 1], 0))),
-        state.config.server.trust_proxy,
-        &state.config.server.trusted_proxies,
+        state.config.trust_proxy,
+        &state.config.trusted_proxies,
     );
     let ip_key: std::net::IpAddr = ip
         .parse()

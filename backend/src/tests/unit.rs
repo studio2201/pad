@@ -46,7 +46,7 @@ async fn test_authenticated_with_valid_header_pin() {
     use axum_extra::extract::cookie::CookieJar;
 
     let mut config = AppConfig::load_from_env(4402);
-    config.server.pin = Some("1234".to_string());
+    config.pin = Some("1234".to_string());
     let state: AppState = Arc::new(AppStateInner {
         config,
         data_dir: PathBuf::from("/tmp"),

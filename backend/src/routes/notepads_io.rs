@@ -30,7 +30,7 @@ pub async fn get_notes(
     let content = fs::read_to_string(&note_path).await.unwrap_or_default();
 
     let secure =
-        state.config.server.base_url.starts_with("https") && state.config.node_env == "production";
+        state.config.base_url.starts_with("https") && state.config.node_env == "production";
     let history_age_secs = (state.config.page_history_cookie_age_days * 24 * 3600) as u64;
 
     let jar = jar.add(

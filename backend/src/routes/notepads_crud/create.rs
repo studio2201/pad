@@ -111,7 +111,7 @@ pub async fn create_notepad(jar: CookieJar, State(state): State<AppState>) -> im
     state.index_notepads().await;
 
     let secure =
-        state.config.server.base_url.starts_with("https") && state.config.node_env == "production";
+        state.config.base_url.starts_with("https") && state.config.node_env == "production";
     let history_age_secs = (state.config.page_history_cookie_age_days * 24 * 3600) as u64;
 
     let jar = jar.add(
