@@ -94,6 +94,10 @@ Distributed under the Apache 2.0 License. See [LICENSE](LICENSE) for details.
 
 ---
 
+### Project Banner Showcase
+
+Official **Pad** project banner illustrating real-time collaborative markdown scratchpad visual design.
+
 <p align="center">
   <a href="https://github.com/studio2201/pad">
     <img src="assets/pad-header.jpg" alt="studio2201 banner" width="100%">
