@@ -85,10 +85,10 @@ mod tests {
 
     #[test]
     fn clamps_to_safe_range() {
-        assert!(build_cookie("x", -1, false).max_age().unwrap().as_secs() >= 60);
+        assert!(build_cookie("x", -1, false).max_age().unwrap().whole_seconds() >= 60);
         assert!(
-            build_cookie("x", 24 * 365 * 100, false).max_age().unwrap().as_secs()
-                <= MAX_LIFETIME_SECONDS
+            build_cookie("x", 24 * 365 * 100, false).max_age().unwrap().whole_seconds()
+                <= MAX_LIFETIME_SECONDS as i64
         );
     }
 

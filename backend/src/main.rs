@@ -13,10 +13,11 @@ use tokio::sync::RwLock;
 use tower_http::services::ServeDir;
 
 mod config;
+mod cookie_auth;
 mod routes;
 pub mod services;
+mod session_id;
 mod state;
-#[cfg(test)]
 mod tests;
 mod ws;
 
@@ -97,8 +98,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     .unwrap();
 
     use notify::Watcher;
-mod cookie_auth;
-mod session_id;
 
     if let Err(e) = watcher.watch(&state.data_dir, notify::RecursiveMode::NonRecursive) {
         eprintln!("Failed to start file watcher on data directory: {}", e);

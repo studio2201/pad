@@ -1,4 +1,4 @@
-getrandom = { version = "0.2" }
+
 [package]
 name = "backend"
 version = "1.0.27"
@@ -15,6 +15,7 @@ name = "backend"
 path = "src/main.rs"
 
 [dependencies]
+getrandom = { version = "0.2" }
 shared-core = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.0.39" }
 shared-backend = { git = "https://github.com/studio2201/shared-assets.git", tag = "v3.0.39" }
 axum = { version = "0.8", features = ["ws", "macros"] }
@@ -40,6 +41,7 @@ sha2 = "0.11"
 # Direct dependency on `constant_time_eq` for PIN comparison. The same crate
 # is pulled in transitively by `shared-backend`, but declaring it here means a
 # future refactor of shared-backend won't silently break our use of it.
+time = { version = "0.3", default-features = false, features = ["std"] }
 constant_time_eq = "0.5"
 rand = { version = "0.9", features = ["std"] }
 
