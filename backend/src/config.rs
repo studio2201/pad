@@ -34,14 +34,12 @@ pub struct AppConfig {
     pub page_history_cookie_age_days: i64,
     pub node_env: String,
     pub version: String,
-
 }
 
-impl AppConfig {
-    /// Canonical brand name surfaced as the default PWA / site title
-    /// fallback.
-    pub const APP_BRAND: &str = "Pad";
+/// Canonical application brand name.
+pub const APP_BRAND: &str = "Pad";
 
+impl AppConfig {
     /// Build a config by reading common env vars.
     pub fn load_from_env(port: u16) -> Self {
         #[cfg(not(test))]

@@ -1,9 +1,10 @@
+use axum::middleware as axum_middleware;
 use axum::{
-    Router, middleware,
+    Router,
     routing::{get, post, put},
 };
-use shared_backend::middleware::{HstsState, cors_layer, hsts_layer, security_headers_layer};
 use shared_backend::tracing_init::{default_log_dir, init_tracing};
+use crate::middleware::{cors_layer, hsts_layer};
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::path::PathBuf;
@@ -148,7 +149,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/notepads/{id}", put(rename_notepad).delete(delete_notepad))
         .route("/notes/{id}", get(get_notes).post(save_notes))
         .route("/search", get(search_api))
-        .layer(middleware::from_fn_with_state(state.clone(), require_pin));
+        .layer(axum_middleware::from_fn_with_state(state.clone(), require_pin));
 
     let public_api_routes = Router::new()
         .route("/verify-pin", post(verify_pin))
@@ -158,7 +159,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let merged_api = api_routes
         .merge(public_api_routes)
-        .layer(middleware::from_fn_with_state(
+        .layer(axum_middleware::from_fn_with_state(
             state.clone(),
             crate::routes::rate_limit_middleware,
         ));
@@ -175,11 +176,11 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 .precompressed_br()
                 .precompressed_gzip(),
         )
-        .layer(middleware::from_fn_with_state(
+        .layer(axum_middleware::from_fn_with_state(
             crate::middleware::HstsState(server_config.clone()),
             hsts_layer,
         ))
-        .layer(middleware::from_fn_with_state(crate::middleware::SecurityHeadersState(server_config.clone()), crate::middleware::security_headers_layer))
+        .layer(axum_middleware::from_fn_with_state(crate::middleware::SecurityHeadersState(server_config.clone()), crate::middleware::security_headers_layer))
         .layer(tower_http::trace::TraceLayer::new_for_http())
         .layer(cors)
         .with_state(state.clone());
